@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  postgres-db:
+    image: student-life-manager-postgres-image:1.0
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=student-life-manager
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  app:
+    image: student-life-manager-app-image:1.0
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres-data:
