@@ -1,23 +1,26 @@
 package com.gpaqd.student_life_manager.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.gpaqd.student_life_manager.entity.Course;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
-    @Column(name="username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name="password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    public User() {
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Course> courses = new ArrayList<>();
+
+    public User() {
     }
 
     public User(String username, String password) {
@@ -41,11 +44,17 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.setUser(this);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.setUser(null);
     }
 }
