@@ -1,5 +1,6 @@
 package com.gpaqd.student_life_manager.entity.pk;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,8 +8,13 @@ import java.util.Objects;
 @Embeddable
 public class ProjectId implements Serializable {
 
+    @Column(name="course_name")
     private String courseName;
+
+    @Column(name="owned_by_user")
     private String ownedByUser;
+
+    @Column(name="project_number")
     private Integer projectNumber;
 
     public ProjectId() {

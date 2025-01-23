@@ -1,5 +1,6 @@
 package com.gpaqd.student_life_manager.entity.pk;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,8 +8,13 @@ import java.util.Objects;
 @Embeddable
 public class TestId implements Serializable {
 
+    @Column(name="course_name")
     private String courseName;
+
+    @Column(name="owned_by_user")
     private String ownedByUser;
+
+    @Column(name="test_number")
     private Integer testNumber;
 
     public TestId() {
@@ -19,7 +25,7 @@ public class TestId implements Serializable {
         this.ownedByUser = ownedByUser;
         this.testNumber = testNumber;
     }
-
+    
     public String getCourseName() {
         return courseName;
     }
@@ -43,7 +49,7 @@ public class TestId implements Serializable {
     public void setTestNumber(Integer testNumber) {
         this.testNumber = testNumber;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
