@@ -39,7 +39,6 @@ public class Lab {
     @Column(name = "deadline")
     private LocalDate deadline;
 
-    // Konstruktory
     public Lab() {
     }
 
