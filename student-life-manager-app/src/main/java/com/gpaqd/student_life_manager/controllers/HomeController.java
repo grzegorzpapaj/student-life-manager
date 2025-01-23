@@ -1,7 +1,7 @@
 package com.gpaqd.student_life_manager.controllers;
 
-import com.gpaqd.student_life_manager.dao.UserDAOImpl;
 import com.gpaqd.student_life_manager.entity.User;
+import com.gpaqd.student_life_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class HomeController {
 
-	private UserDAOImpl userDAO;
+	private UserService userService;
 
 	@Autowired
-	public HomeController(UserDAOImpl userDAO) {
-		this.userDAO = userDAO;
+	public HomeController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@GetMapping
@@ -25,7 +25,7 @@ public class HomeController {
 		User user = new User("abcd", "1234");
 
 		System.out.println("Saving the user");
-		userDAO.save(user);
+		userService.save(user);
 
 		return "Saved user: " + user.getUsername();
 	}
