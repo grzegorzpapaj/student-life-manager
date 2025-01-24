@@ -1,17 +1,17 @@
 package com.gpaqd.student_life_manager.service;
 
-import com.gpaqd.student_life_manager.entity.Test;
-import com.gpaqd.student_life_manager.entity.pk.TestId;
+import com.gpaqd.student_life_manager.entity.MyTest;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 
 import java.util.List;
 
 public interface TestService {
 
-    List<Test> findAll();
+    List<MyTest> findAll();
 
-    Test findById(TestId id);
+    MyTest findById(MyTestId id);
 
-    Test save(Test test);
+    MyTest save(MyTest myTest);
 
-    void deleteById(TestId id);
+    void deleteById(MyTestId id);
 }

@@ -3,23 +3,23 @@ package com.gpaqd.student_life_manager.controllers;
 import com.gpaqd.student_life_manager.entity.User;
 import com.gpaqd.student_life_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/")
+@Controller
 public class HomeController {
 
-	private UserService userService;
+	private final UserService userService;
 
 	@Autowired
 	public HomeController(UserService userService) {
 		this.userService = userService;
 	}
 
-	@GetMapping
-	public String home() {
+	@GetMapping("/")
+	public String home(Model model) {
 
 		System.out.println("Creating new user object...");
 		User user = new User("abcd", "1234");
@@ -27,6 +27,8 @@ public class HomeController {
 		System.out.println("Saving the user");
 		userService.save(user);
 
-		return "Saved user: " + user.getUsername();
+		model.addAttribute("message", "Saved user: " + user.getUsername());
+
+		return "index";
 	}
 }

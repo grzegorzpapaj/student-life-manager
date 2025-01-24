@@ -1,17 +1,16 @@
 package com.gpaqd.student_life_manager.entity;
 
-import com.gpaqd.student_life_manager.entity.Course;
-import com.gpaqd.student_life_manager.entity.pk.TestId;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "tests")
-public class Test {
+public class MyTest {
 
     @EmbeddedId
-    private TestId id;
+    private MyTestId id;
 
     @ManyToOne(optional = false)
     @JoinColumns({
@@ -40,16 +39,16 @@ public class Test {
     @Column(name = "is_exam", nullable = false)
     private boolean exam;
 
-    public Test() {
+    public MyTest() {
     }
 
-    public Test(TestId id,
-                String description,
-                BigDecimal minPoints,
-                BigDecimal userPoints,
-                BigDecimal maxPoints,
-                LocalDate date,
-                boolean exam) {
+    public MyTest(MyTestId id,
+                  String description,
+                  BigDecimal minPoints,
+                  BigDecimal userPoints,
+                  BigDecimal maxPoints,
+                  LocalDate date,
+                  boolean exam) {
         this.id = id;
         this.description = description;
         this.minPoints = minPoints;
@@ -59,11 +58,11 @@ public class Test {
         this.exam = exam;
     }
 
-    public TestId getId() {
+    public MyTestId getId() {
         return id;
     }
 
-    public void setId(TestId id) {
+    public void setId(MyTestId id) {
         this.id = id;
     }
 

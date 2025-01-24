@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class TestId implements Serializable {
+public class MyTestId implements Serializable {
 
     @Column(name="course_name")
     private String courseName;
@@ -17,10 +17,10 @@ public class TestId implements Serializable {
     @Column(name="test_number")
     private Integer testNumber;
 
-    public TestId() {
+    public MyTestId() {
     }
 
-    public TestId(String courseName, String ownedByUser, Integer testNumber) {
+    public MyTestId(String courseName, String ownedByUser, Integer testNumber) {
         this.courseName = courseName;
         this.ownedByUser = ownedByUser;
         this.testNumber = testNumber;
@@ -53,11 +53,11 @@ public class TestId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TestId)) return false;
-        TestId testId = (TestId) o;
-        return Objects.equals(courseName, testId.courseName) &&
-                Objects.equals(ownedByUser, testId.ownedByUser) &&
-                Objects.equals(testNumber, testId.testNumber);
+        if (!(o instanceof MyTestId)) return false;
+        MyTestId myTestId = (MyTestId) o;
+        return Objects.equals(courseName, myTestId.courseName) &&
+                Objects.equals(ownedByUser, myTestId.ownedByUser) &&
+                Objects.equals(testNumber, myTestId.testNumber);
     }
 
     @Override
