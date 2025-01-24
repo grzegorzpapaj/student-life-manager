@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
 
-    // set up constructor injection
     private UserRepository userRepository;
 
     @Autowired
