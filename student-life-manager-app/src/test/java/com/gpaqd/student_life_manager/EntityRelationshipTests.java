@@ -31,7 +31,7 @@ class EntityRelationshipTests {
     private LabRepository labRepository;
 
     @Autowired
-    private TestRepository testRepository;
+    private MyTestRepository myTestRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -84,9 +84,9 @@ class EntityRelationshipTests {
         );
         course.addLab(lab);
 
-        TestId testId = new TestId("PAINT", user.getUsername(), 1);
-        Test testEntity = new Test(
-            testId,
+        MyTestId myTestId = new MyTestId("PAINT", user.getUsername(), 1);
+        MyTest myTestEntity = new MyTest(
+            myTestId,
             "Chapter 1-3 Test",
             new BigDecimal("11.00"), // minPoints
             new BigDecimal("0.00"),    // userPoints
@@ -94,7 +94,7 @@ class EntityRelationshipTests {
             LocalDate.now().plusDays(1), // date
             false   // isExam
         );
-        course.addTest(testEntity);
+        course.addMyTest(myTestEntity);
 
 
         ProjectId projectId = new ProjectId("PAINT", user.getUsername(), 1);
@@ -125,24 +125,24 @@ class EntityRelationshipTests {
 
 
         Lab fetchedLab = fetchedCourse.getLabs().get(0);
-        assertEquals(1, fetchedLab.getId().getLabName(), "Lab number should match");
+        assertEquals(1, fetchedLab.getId().getLabNumber(), "Lab number should match");
         assertEquals("PAINT", fetchedLab.getId().getCourseName(), "Course name in Lab ID should match");
         assertEquals("Budowanie Strony Internetowej", fetchedLab.getDescription(), "Lab description should match");
         assertEquals(new BigDecimal("2.00"), fetchedLab.getMinPoints(), "Lab minPoints should match");
 
 
-        Test fetchedTest = fetchedCourse.getTests().get(0);
-        assertEquals(1, fetchedTest.getId().getTestName(), "Test number should match");
+        MyTest fetchedTest = fetchedCourse.getMyTests().get(0);
+        assertEquals(1, fetchedTest.getId().getMyTestNumber(), "Test number should match");
         assertEquals("Chapter 1-3 Test", fetchedTest.getDescription(), "Test description should match");
         assertEquals(new BigDecimal("11.00"), fetchedTest.getMinPoints(), "Test minPoints should match");
         assertFalse(fetchedTest.isExam(), "Test should not be an exam");
 
 
-        Test fetchedProject = fetchedCourse.getProjects().get(0);
-        assertEquals(1, fetchedTest.getId().getTestName(), "Project name should match");
-        assertEquals("Piekny projekt na PAINT", fetchedTest.getDescription(), "Project description should match");
-        assertEquals(new BigDecimal("3.00"), fetchedTest.getMinPoints(), "Project minPoints should match");
-        assertEquals(new BigDecimal("0.00"), fetchedTest.getUserPoints(), "Project userPoints should match");
+        Project fetchedProject = fetchedCourse.getProjects().get(0);
+        assertEquals(1, fetchedProject.getId().getProjectNumber(), "Project Number should match");
+        assertEquals("Piekny projekt na PAINT", fetchedProject.getDescription(), "Project description should match");
+        assertEquals(new BigDecimal("3.00"), fetchedProject.getMinPoints(), "Project minPoints should match");
+        assertEquals(new BigDecimal("0.00"), fetchedProject.getUserPoints(), "Project userPoints should match");
 
     }
 }
