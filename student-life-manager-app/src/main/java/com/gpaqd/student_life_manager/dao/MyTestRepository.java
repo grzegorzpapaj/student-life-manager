@@ -4,5 +4,5 @@ import com.gpaqd.student_life_manager.entity.MyTest;
 import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TestRepository extends JpaRepository<MyTest, MyTestId> {
+public interface MyTestRepository extends JpaRepository<MyTest, MyTestId> {
 }

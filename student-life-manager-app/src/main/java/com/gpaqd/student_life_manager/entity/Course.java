@@ -32,7 +32,7 @@ public class Course {
     private BigDecimal minLabsPoints;
 
     @Column(name = "min_tests_points")
-    private BigDecimal minTestsPoints;
+    private BigDecimal minMyTestsPoints;
 
     @Column(name = "min_projects_points")
     private BigDecimal minProjectsPoints;
@@ -56,14 +56,14 @@ public class Course {
                   BigDecimal minPoints,
                   BigDecimal currentPoints,
                   BigDecimal minLabsPoints,
-                  BigDecimal minTestsPoints,
+                  BigDecimal minMyTestsPoints,
                   BigDecimal minProjectsPoints,
                   BigDecimal minExamsPoints) {
         this.id = id;
         this.minPoints = minPoints;
         this.currentPoints = currentPoints;
         this.minLabsPoints = minLabsPoints;
-        this.minTestsPoints = minTestsPoints;
+        this.minMyTestsPoints = minMyTestsPoints;
         this.minProjectsPoints = minProjectsPoints;
         this.minExamsPoints = minExamsPoints;
     }
@@ -117,11 +117,11 @@ public class Course {
     }
 
     public BigDecimal getMinTestsPoints() {
-        return minTestsPoints;
+        return minMyTestsPoints;
     }
 
     public void setMinTestsPoints(BigDecimal minTestsPoints) {
-        this.minTestsPoints = minTestsPoints;
+        this.minMyTestsPoints = minTestsPoints;
     }
 
     public BigDecimal getMinProjectsPoints() {
@@ -140,11 +140,11 @@ public class Course {
         this.minExamsPoints = minExamsPoints;
     }
 
-    public List<MyTest> getTests() {
+    public List<MyTest> getMyTests() {
         return myTests;
     }
 
-    public void setTests(List<MyTest> myTests) {
+    public void setMyTests(List<MyTest> myTests) {
         this.myTests = myTests;
     }
 
@@ -164,12 +164,12 @@ public class Course {
         this.labs = labs;
     }
 
-    public void addTest(MyTest myTest) {
+    public void addMyTest(MyTest myTest) {
         myTests.add(myTest);
         myTest.setCourse(this);
     }
 
-    public void removeTest(MyTest myTest) {
+    public void removeMyTest(MyTest myTest) {
         myTests.remove(myTest);
         myTest.setCourse(null);
     }
