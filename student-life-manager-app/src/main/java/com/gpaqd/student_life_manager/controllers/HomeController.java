@@ -11,24 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
-	private final UserService userService;
-
-	@Autowired
-	public HomeController(UserService userService) {
-		this.userService = userService;
-	}
-
 	@GetMapping("/")
 	public String home(Model model) {
-
-		System.out.println("Creating new user object...");
-		User user = new User("abcd", "1234");
-
-		System.out.println("Saving the user");
-		userService.save(user);
-
-		model.addAttribute("message", "Saved user: " + user.getUsername());
-
 		return "index";
 	}
 }

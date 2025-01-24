@@ -27,16 +27,7 @@ public class MyTestServiceImpl implements MyTestService{
 
     @Override
     public MyTest findById(MyTestId id) {
-        Optional<MyTest> result = myTestRepository.findById(id);
-
-        MyTest myTest = null;
-        if(result.isPresent()) {
-            myTest = result.get();
-        } else {
-            throw new RuntimeException("Did not find test id - " + id);
-        }
-
-        return myTest;
+        return myTestRepository.findById(id).orElse(null);
     }
 
     @Override

@@ -25,17 +25,7 @@ public class ThresholdServiceImpl implements ThresholdService{
 
     @Override
     public Threshold findById(Long id) {
-        Optional<Threshold> result = thresholdRepository.findById(id);
-
-        Threshold threshold = null;
-
-        if(result.isPresent()) {
-            threshold = result.get();
-        } else {
-            throw new RuntimeException("Did not find threshold id - " + id);
-        }
-
-        return threshold;
+        return thresholdRepository.findById(id).orElse(null);
     }
 
     @Override

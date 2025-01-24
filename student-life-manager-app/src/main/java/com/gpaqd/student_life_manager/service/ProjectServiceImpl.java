@@ -16,7 +16,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository) {
-
+        this.projectRepository = projectRepository;
     }
 
     @Override
@@ -26,18 +26,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Project findById(ProjectId id) {
-
-        Optional<Project> result = projectRepository.findById(id);
-
-        Project project = null;
-
-        if(result.isPresent()) {
-            project = result.get();
-        } else {
-            throw new RuntimeException("Did not find project id - " + id);
-        }
-
-        return project;
+        return projectRepository.findById(id).orElse(null);
     }
 
     @Override

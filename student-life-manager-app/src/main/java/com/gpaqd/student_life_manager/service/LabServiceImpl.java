@@ -27,17 +27,7 @@ public class LabServiceImpl implements LabService{
 
     @Override
     public Lab findById(LabId id) {
-        Optional<Lab> result = labRepository.findById(id);
-
-        Lab lab = null;
-
-        if(result.isPresent()) {
-            lab = result.get();
-        } else {
-            throw new RuntimeException("Did not find lab id - " + id);
-        }
-
-        return lab;
+        return labRepository.findById(id).orElse(null);
     }
 
     @Override
