@@ -41,7 +41,7 @@ public class Course {
     private BigDecimal minExamsPoints;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Test> tests = new ArrayList<>();
+    private List<MyTest> myTests = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects = new ArrayList<>();
@@ -140,12 +140,12 @@ public class Course {
         this.minExamsPoints = minExamsPoints;
     }
 
-    public List<Test> getTests() {
-        return tests;
+    public List<MyTest> getTests() {
+        return myTests;
     }
 
-    public void setTests(List<Test> tests) {
-        this.tests = tests;
+    public void setTests(List<MyTest> myTests) {
+        this.myTests = myTests;
     }
 
     public List<Project> getProjects() {
@@ -164,14 +164,14 @@ public class Course {
         this.labs = labs;
     }
 
-    public void addTest(Test test) {
-        tests.add(test);
-        test.setCourse(this);
+    public void addTest(MyTest myTest) {
+        myTests.add(myTest);
+        myTest.setCourse(this);
     }
 
-    public void removeTest(Test test) {
-        tests.remove(test);
-        test.setCourse(null);
+    public void removeTest(MyTest myTest) {
+        myTests.remove(myTest);
+        myTest.setCourse(null);
     }
 
     public void addProject(Project project) {

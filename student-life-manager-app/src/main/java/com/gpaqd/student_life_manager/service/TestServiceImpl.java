@@ -1,8 +1,8 @@
 package com.gpaqd.student_life_manager.service;
 
 import com.gpaqd.student_life_manager.dao.TestRepository;
-import com.gpaqd.student_life_manager.entity.Test;
-import com.gpaqd.student_life_manager.entity.pk.TestId;
+import com.gpaqd.student_life_manager.entity.MyTest;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,31 +20,31 @@ public class TestServiceImpl implements TestService{
     }
 
     @Override
-    public List<Test> findAll() {
+    public List<MyTest> findAll() {
         return testRepository.findAll();
     }
 
     @Override
-    public Test findById(TestId id) {
-        Optional<Test> result = testRepository.findById(id);
+    public MyTest findById(MyTestId id) {
+        Optional<MyTest> result = testRepository.findById(id);
 
-        Test test = null;
+        MyTest myTest = null;
         if(result.isPresent()) {
-            test = result.get();
+            myTest = result.get();
         } else {
             throw new RuntimeException("Did not find test id - " + id);
         }
 
-        return test;
+        return myTest;
     }
 
     @Override
-    public Test save(Test test) {
-        return testRepository.save(test);
+    public MyTest save(MyTest myTest) {
+        return testRepository.save(myTest);
     }
 
     @Override
-    public void deleteById(TestId id) {
+    public void deleteById(MyTestId id) {
         testRepository.deleteById(id);
     }
 }
