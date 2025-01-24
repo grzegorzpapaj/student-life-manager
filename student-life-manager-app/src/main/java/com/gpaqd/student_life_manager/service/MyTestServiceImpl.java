@@ -1,6 +1,7 @@
 package com.gpaqd.student_life_manager.service;
 
-import com.gpaqd.student_life_manager.dao.TestRepository;
+import com.gpaqd.student_life_manager.dao.MyTestRepository;
+import com.gpaqd.student_life_manager.dao.MyTestRepository;
 import com.gpaqd.student_life_manager.entity.MyTest;
 import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,23 +11,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TestServiceImpl implements TestService{
+public class MyTestServiceImpl implements MyTestService{
 
-    private TestRepository testRepository;
+    private MyTestRepository myTestRepository;
 
     @Autowired
-    public TestServiceImpl(TestRepository testRepository) {
-        this.testRepository = testRepository;
+    public MyTestServiceImpl(MyTestRepository myTestRepository) {
+        this.myTestRepository = myTestRepository;
     }
 
     @Override
     public List<MyTest> findAll() {
-        return testRepository.findAll();
+        return myTestRepository.findAll();
     }
 
     @Override
     public MyTest findById(MyTestId id) {
-        Optional<MyTest> result = testRepository.findById(id);
+        Optional<MyTest> result = myTestRepository.findById(id);
 
         MyTest myTest = null;
         if(result.isPresent()) {
@@ -40,11 +41,11 @@ public class TestServiceImpl implements TestService{
 
     @Override
     public MyTest save(MyTest myTest) {
-        return testRepository.save(myTest);
+        return myTestRepository.save(myTest);
     }
 
     @Override
     public void deleteById(MyTestId id) {
-        testRepository.deleteById(id);
+        myTestRepository.deleteById(id);
     }
 }

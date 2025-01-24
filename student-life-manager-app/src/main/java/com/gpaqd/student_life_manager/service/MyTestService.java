@@ -5,7 +5,7 @@ import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 
 import java.util.List;
 
-public interface TestService {
+public interface MyTestService {
 
     List<MyTest> findAll();
 
