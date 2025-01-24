@@ -15,15 +15,15 @@ public class MyTestId implements Serializable {
     private String ownedByUser;
 
     @Column(name="test_number")
-    private Integer testNumber;
+    private Integer myTestNumber;
 
     public MyTestId() {
     }
 
-    public MyTestId(String courseName, String ownedByUser, Integer testNumber) {
+    public MyTestId(String courseName, String ownedByUser, Integer myTestNumber) {
         this.courseName = courseName;
         this.ownedByUser = ownedByUser;
-        this.testNumber = testNumber;
+        this.myTestNumber = myTestNumber;
     }
     
     public String getCourseName() {
@@ -42,12 +42,12 @@ public class MyTestId implements Serializable {
         this.ownedByUser = ownedByUser;
     }
 
-    public Integer getTestNumber() {
-        return testNumber;
+    public Integer getMyTestNumber() {
+        return myTestNumber;
     }
 
-    public void setTestNumber(Integer testNumber) {
-        this.testNumber = testNumber;
+    public void setMyTestNumber(Integer testNumber) {
+        this.myTestNumber = testNumber;
     }
 
     @Override
@@ -57,11 +57,11 @@ public class MyTestId implements Serializable {
         MyTestId myTestId = (MyTestId) o;
         return Objects.equals(courseName, myTestId.courseName) &&
                 Objects.equals(ownedByUser, myTestId.ownedByUser) &&
-                Objects.equals(testNumber, myTestId.testNumber);
+                Objects.equals(myTestNumber, myTestId.myTestNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseName, ownedByUser, testNumber);
+        return Objects.hash(courseName, ownedByUser, myTestNumber);
     }
 }
