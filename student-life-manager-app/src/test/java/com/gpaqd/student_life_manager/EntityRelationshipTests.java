@@ -3,7 +3,8 @@ package com.gpaqd.student_life_manager;
 import com.gpaqd.student_life_manager.entity.*;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 import com.gpaqd.student_life_manager.entity.pk.LabId;
-import com.gpaqd.student_life_manager.entity.pk.TestId;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
+import com.gpaqd.student_life_manager.entity.pk.ProjectId;
 import com.gpaqd.student_life_manager.dao.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -120,7 +121,7 @@ class EntityRelationshipTests {
         assertEquals("PAINT", fetchedCourse.getId().getCourseName(), "Course name should match");
         assertEquals("testUser", fetchedCourse.getId().getOwnedByUser(), "Username should match");
         assertEquals(1, fetchedCourse.getLabs().size(), "Course should have 1 lab");
-        assertEquals(1, fetchedCourse.getTests().size(), "Course should have 1 test");
+        assertEquals(1, fetchedCourse.getMyTests().size(), "Course should have 1 test");
         assertEquals(1, fetchedCourse.getProjects().size(), "Course should have 1 project");
 
 
