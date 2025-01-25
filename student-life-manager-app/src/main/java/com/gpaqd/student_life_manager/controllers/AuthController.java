@@ -1,6 +1,7 @@
 package com.gpaqd.student_life_manager.controllers;
 
 import com.gpaqd.student_life_manager.entity.User;
+import com.gpaqd.student_life_manager.service.AuthService;
 import com.gpaqd.student_life_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
+    private AuthService authService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @GetMapping("/login")
@@ -27,8 +30,12 @@ public class AuthController {
     public String processLogin(@RequestParam String username,
                                @RequestParam String password,
                                Model model) {
-        System.out.println("Checking if user login correct");
-        return "redirect:/";
+
+        if(authService.authenticate(username, password)) {
+            return "redirect:/user/dashboard";
+        } else {
+            return "redirect:/auth/login?error=true";
+        }
     }
 
     @GetMapping("/register")
