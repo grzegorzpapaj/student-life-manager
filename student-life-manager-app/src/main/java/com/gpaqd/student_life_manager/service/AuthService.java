@@ -18,4 +18,16 @@ public class AuthService {
         User user = userService.findById(username);
         return (user != null && user.getPassword().equals(password));
     }
+
+    public boolean registerUser(User newUser) {
+
+        User existing = userService.findById(newUser.getUsername());
+
+        if(existing != null) {
+            return false;
+        }
+
+        userService.save(newUser);
+        return true;
+    }
 }

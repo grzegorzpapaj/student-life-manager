@@ -3,6 +3,7 @@ package com.gpaqd.student_life_manager.controllers;
 import com.gpaqd.student_life_manager.entity.User;
 import com.gpaqd.student_life_manager.service.AuthService;
 import com.gpaqd.student_life_manager.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +30,16 @@ public class AuthController {
     @PostMapping("/login")
     public String processLogin(@RequestParam String username,
                                @RequestParam String password,
-                               Model model) {
+                               Model model,
+                               HttpSession session) {
 
         if(authService.authenticate(username, password)) {
+
+            session.setAttribute("loggedInUser", username);
             return "redirect:/user/dashboard";
         } else {
-            return "redirect:/auth/login?error=true";
+            model.addAttribute("error", "Incorrect username or password. Please try again!");
+            return "auth/login";
         }
     }
 
@@ -48,15 +53,11 @@ public class AuthController {
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("newUser") User newUser, Model model) {
 
-        User existing = userService.findById(newUser.getUsername());
-
-        if(existing != null) {
-            model.addAttribute("error", "Username already taken!");
-            return "/auth/register";
+        if(authService.registerUser(newUser)) {
+            model.addAttribute("message", "User created: " + newUser.getUsername());
+            return "redirect:/auth/login";
         }
-
-        User savedUser = userService.save(newUser);
-        model.addAttribute("message", "User created: " + newUser.getUsername());
-        return "redirect:/auth/login";
+        model.addAttribute("error", "Username already taken!");
+        return "/auth/register";
     }
 }
