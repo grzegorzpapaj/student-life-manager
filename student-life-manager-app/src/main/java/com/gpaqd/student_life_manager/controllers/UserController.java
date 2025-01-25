@@ -34,4 +34,9 @@ public class UserController {
 
         return "/user/dashboard";
     }
+
+    @GetMapping("/courses")
+    public String showCourses(Model model) {
+
+    }
 }
