@@ -226,6 +226,57 @@
             </div>
         </div>
 
+        <!-- ================== PROJECTS FIELDS ================== -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>Projects</strong>
+                <button type="button" class="btn btn-sm btn-success" onclick="addProjectRow()">+ Add Project</button>
+            </div>
+            <div class="card-body" id="projectsContainer">
+                <div th:each="proj, iStat : ${courseDto.projects}" class="mb-3 border rounded p-2">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label class="form-label">Project Number</label>
+                            <input type="number" class="form-control"
+                                   th:field="*{projects[${iStat.index}].projectNumber}" />
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{projects[${iStat.index}].description}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Min Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{projects[${iStat.index}].minPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Max Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{projects[${iStat.index}].maxPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">User Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{projects[${iStat.index}].userPoints}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-12">
+                            <label class="form-label">Deadline</label>
+                            <input type="date" class="form-control"
+                                   th:field="*{projects[${iStat.index}].deadline}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <!-- BUTTONS -->
         <div class="mb-3">
@@ -348,6 +399,55 @@
                 <input type="checkbox" class="form-check-input"
                        name="myTests[${index}].exam"/>
             </div>
+        </div>
+    `;
+
+        container.appendChild(newDiv);
+    }
+
+    function addProjectRow() {
+        const container = document.getElementById('projectsContainer');
+        const index = container.querySelectorAll('.mb-3.border').length;
+
+        const newDiv = document.createElement('div');
+        newDiv.className = 'mb-3 border rounded p-2';
+
+        newDiv.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-3">
+              <label class="form-label">Project Number</label>
+              <input type="number" class="form-control"
+                     name="projects[${index}].projectNumber"/>
+          </div>
+          <div class="col-md-9">
+              <label class="form-label">Description</label>
+              <input type="text" class="form-control"
+                     name="projects[${index}].description"/>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-4">
+              <label class="form-label">Min Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="projects[${index}].minPoints"/>
+          </div>
+          <div class="col-md-4">
+              <label class="form-label">Max Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="projects[${index}].maxPoints"/>
+          </div>
+          <div class="col-md-4">
+              <label class="form-label">User Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="projects[${index}].userPoints"/>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-12">
+              <label class="form-label">Deadline</label>
+              <input type="date" class="form-control"
+                     name="projects[${index}].deadline"/>
+          </div>
         </div>
     `;
 

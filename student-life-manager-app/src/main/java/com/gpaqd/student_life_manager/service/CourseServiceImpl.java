@@ -4,13 +4,12 @@ import com.gpaqd.student_life_manager.dao.CourseRepository;
 import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
 import com.gpaqd.student_life_manager.dto.LabDTO;
 import com.gpaqd.student_life_manager.dto.MyTestDTO;
-import com.gpaqd.student_life_manager.entity.Course;
-import com.gpaqd.student_life_manager.entity.Lab;
-import com.gpaqd.student_life_manager.entity.MyTest;
-import com.gpaqd.student_life_manager.entity.Threshold;
+import com.gpaqd.student_life_manager.dto.ProjectDTO;
+import com.gpaqd.student_life_manager.entity.*;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 import com.gpaqd.student_life_manager.entity.pk.LabId;
 import com.gpaqd.student_life_manager.entity.pk.MyTestId;
+import com.gpaqd.student_life_manager.entity.pk.ProjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,8 +72,9 @@ public class CourseServiceImpl implements CourseService{
 
         Course courseWithLabs = addLabs(dto, savedCourse, username);
         Course courseWithTests = addTests(dto, courseWithLabs, username);
+        Course courseWithProjects = addProjects(dto, courseWithTests, username);
 
-        return courseRepository.save(courseWithTests);
+        return courseRepository.save(courseWithProjects);
     }
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
@@ -105,6 +105,35 @@ public class CourseServiceImpl implements CourseService{
         }
         return savedCourse;
     }
+
+    private Course addProjects(CourseDetailsDTO dto, Course savedCourse, String username) {
+        if (dto.getProjects() != null) {
+            for (ProjectDTO projectDto : dto.getProjects()) {
+                if (projectDto.getProjectNumber() == null) {
+                    continue;
+                }
+                ProjectId projectId = new ProjectId(
+                        savedCourse.getId().getCourseName(),
+                        username,
+                        projectDto.getProjectNumber()
+                );
+
+                Project project = new Project(
+                        projectId,
+                        projectDto.getDescription(),
+                        projectDto.getMinPoints() != null ? projectDto.getMinPoints() : BigDecimal.ZERO,
+                        projectDto.getUserPoints(),
+                        projectDto.getMaxPoints() != null ? projectDto.getMaxPoints() : BigDecimal.ZERO,
+                        projectDto.getDeadline()
+                );
+
+                project.setCourse(savedCourse);
+                savedCourse.addProject(project);
+            }
+        }
+        return savedCourse;
+    }
+
 
     private Course addTests(CourseDetailsDTO dto, Course savedCourse, String username) {
         if (dto.getMyTests() != null) {

@@ -78,7 +78,6 @@ public class UserController {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
 
         courseService.saveCourseWithDTO(dto, loggedInUser);
-        System.out.println(dto.getMyTests().getFirst().getDescription());
         return "redirect:/user/courses";
     }
 }
