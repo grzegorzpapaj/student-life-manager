@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService{
@@ -75,6 +76,28 @@ public class CourseServiceImpl implements CourseService{
         Course courseWithProjects = addProjects(dto, courseWithTests, username);
 
         return courseRepository.save(courseWithProjects);
+    }
+
+     @Override
+    public CourseDetailsDTO getCourseDetailsDTO(CourseId courseId) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course == null) {
+            return null;
+        }
+
+        CourseDetailsDTO dto = new CourseDetailsDTO();
+        dto.setCourseName(course.getId().getCourseName());
+        dto.setCurrentPoints(course.getCurrentPoints());
+        dto.setMinPoints(course.getMinPoints());
+        dto.setMinLabsPoints(course.getMinLabsPoints());
+        dto.setMinTestsPoints(course.getMinTestsPoints());
+        dto.setMinProjectsPoints(course.getMinProjectsPoints());
+        dto.setMinExamsPoints(course.getMinExamsPoints());
+
+        List<LabDTO> labDTOs = course.getLabs().stream().map(this::convertLabToDTO).collect(Collectors.toList());
+        dto.setLabs(labDTOs);
+
+        return dto;
     }
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
@@ -203,5 +226,19 @@ public class CourseServiceImpl implements CourseService{
         course.setMinExamsPoints(dto.getMinExamsPoints());
 
         return course;
+    }
+
+    
+
+    private LabDTO convertLabToDTO(Lab lab) {
+        LabDTO labDTO = new LabDTO();
+        labDTO.setLabNumber(lab.getId().getLabNumber());
+        labDTO.setDescription(lab.getDescription());
+        labDTO.setMinPoints(lab.getMinPoints());
+        labDTO.setMaxPoints(lab.getMaxPoints());
+        labDTO.setUserPoints(lab.getUserPoints());
+        labDTO.setDate(lab.getDate());
+        labDTO.setDeadline(lab.getDeadline());
+        return labDTO;
     }
 }

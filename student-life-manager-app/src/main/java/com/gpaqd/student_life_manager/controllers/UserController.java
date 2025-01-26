@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -80,4 +81,34 @@ public class UserController {
         courseService.saveCourseWithDTO(dto, loggedInUser);
         return "redirect:/user/courses";
     }
+
+    @GetMapping("/courses/dashboard/{courseName}")
+    public String showCourseDashboard(@PathVariable("courseName") String courseName,
+                                      Model model,
+                                      HttpSession session) {
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        System.out.println(loggedInUser);
+        System.out.println(courseName);
+
+        if (loggedInUser == null) {
+            return "redirect:/auth/login";
+        }
+
+        CourseId courseId = new CourseId(courseName, loggedInUser);
+        System.out.println(courseId);
+        
+        CourseDetailsDTO courseDto = courseService.getCourseDetailsDTO(courseId);
+        System.out.println(courseDto);
+
+        if (courseDto == null) {
+            // Handle course not found, possibly redirect with an error message
+            return "redirect:/user/courses?error=CourseNotFound";
+        }
+
+        model.addAttribute("course", courseDto);
+        // Add any additional attributes needed for the dashboard
+
+        return "user/course-dashboard"; // Path to your course dashboard Thymeleaf template
+    }
+
 }
