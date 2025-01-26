@@ -10,7 +10,7 @@ public class AuthService {
     private UserService userService;
 
     @Autowired
-    private AuthService(UserService userService) {
+    public AuthService(UserService userService) {
         this.userService = userService;
     }
 

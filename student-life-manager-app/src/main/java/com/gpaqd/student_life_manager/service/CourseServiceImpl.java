@@ -25,6 +25,11 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public List<Course> findAllByUser(String username) {
+        return courseRepository.findByIdOwnedByUser(username);
+    }
+
+    @Override
     public Course findById(CourseId id) {
         return courseRepository.findById(id).orElse(null);
     }
@@ -37,5 +42,12 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteById(CourseId id) {
         courseRepository.deleteById(id);
+    }
+
+    @Override
+    public Course createNewEmptyCourseForUser(String username) {
+        Course newCourse = new Course();
+        newCourse.setId(new CourseId("", username));
+        return newCourse;
     }
 }

@@ -9,9 +9,13 @@ public interface CourseService {
 
     List<Course> findAll();
 
+    List<Course> findAllByUser(String username);
+
     Course findById(CourseId id);
 
     Course save(Course course);
 
     void deleteById(CourseId id);
+
+    Course createNewEmptyCourseForUser(String username);
 }
