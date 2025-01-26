@@ -67,9 +67,12 @@ public class CourseServiceImpl implements CourseService{
         courseToUse.setThreshold(thresholdToUse);
         Course savedCourse = courseRepository.save(courseToUse);
 
+        Course courseWithLabs = addLabs(dto, savedCourse, username);
 
-        // to przeniesc do innej private funkcji addLabs np.
+        return courseRepository.save(courseWithLabs);
+    }
 
+    private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
         if (dto.getLabs() != null) {
             for (LabDTO labDto : dto.getLabs()) {
                 if (labDto.getLabNumber() == null) {
@@ -95,9 +98,10 @@ public class CourseServiceImpl implements CourseService{
                 // addLab() w encji Course ustawia lab.setCourse(this).
             }
         }
-
-        return courseRepository.save(courseToUse);
+        return savedCourse;
     }
+
+
 
     private Threshold findOrCreateThresholdToUse(CourseDetailsDTO dto) {
         Threshold existingThreshold = thresholdService.findByAllPoints(
