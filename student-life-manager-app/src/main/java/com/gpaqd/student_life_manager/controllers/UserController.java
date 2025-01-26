@@ -1,6 +1,7 @@
 package com.gpaqd.student_life_manager.controllers;
 
 
+import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
 import com.gpaqd.student_life_manager.entity.Course;
 import com.gpaqd.student_life_manager.entity.User;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
@@ -65,18 +66,18 @@ public class UserController {
             return "redirect:/auth/login";
         }
 
-        Course newCourse = courseService.createNewEmptyCourseForUser(loggedInUser);
+        CourseDetailsDTO dto = new CourseDetailsDTO();
 
-        model.addAttribute("course", newCourse);
+        model.addAttribute("courseDto", dto);
 
         return "/user/course-form";
     }
 
     @PostMapping("/courses/add")
-    public String processAddCourse(@ModelAttribute("course") Course course, HttpSession session) {
+    public String processAddCourse(@ModelAttribute("courseDto") CourseDetailsDTO dto, HttpSession session) {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
 
-        courseService.save(course);
+        courseService.saveCourseWithDTO(dto, loggedInUser);
         return "redirect:/user/courses";
     }
 }

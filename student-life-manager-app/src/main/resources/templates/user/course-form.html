@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Add New Course</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add New Course + Threshold + Labs</title>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
     >
 </head>
 <body class="d-flex flex-column min-vh-100">
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/user/dashboard}">Student Life Manager</a>
@@ -19,39 +19,162 @@
 </nav>
 
 <main class="container my-5">
-    <h2>Add New Course</h2>
+    <h2>Add Course + Threshold + Labs</h2>
 
-    <form th:object="${course}" th:action="@{/user/courses/add}" method="post">
-        <!-- W kluczu złożonym CourseId mamy (courseName, ownedByUser).
-             'ownedByUser' raczej nie jest zmieniane ręcznie, bo przypisujemy je z kontrolera.
-         -->
+    <!-- Zwróć uwagę: "th:object=${courseDto}" i action do POSTa -->
+    <form th:object="${courseDto}" th:action="@{/user/courses/add}" method="post">
 
-        <div class="mb-3">
-            <label for="courseName" class="form-label">Course Name:</label>
-            <input type="text" class="form-control" id="courseName"
-                   th:field="*{id.courseName}" placeholder="Enter course name" required />
+        <!-- ================== COURSE FIELDS ================== -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Course Details</strong>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="courseName" class="form-label">Course Name</label>
+                    <input type="text" class="form-control"
+                           id="courseName"
+                           th:field="*{courseName}"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="minLabsPoints" class="form-label">Min Labs Points</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="minLabsPoints"
+                           th:field="*{minLabsPoints}" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="minTestsPoints" class="form-label">Min Tests Points</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="minTestsPoints"
+                           th:field="*{minTestsPoints}" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="minProjectsPoints" class="form-label">Min Projects Points</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="minProjectsPoints"
+                           th:field="*{minProjectsPoints}" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="minExamsPoints" class="form-label">Min Exams Points</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="minExamsPoints"
+                           th:field="*{minExamsPoints}" />
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="minPoints" class="form-label">Min Points:</label>
-            <input type="number" step="0.01" class="form-control"
-                   id="minPoints"
-                   th:field="*{minPoints}"
-                   placeholder="Minimum points to pass" />
+        <!-- ================== THRESHOLD FIELDS ================== -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Threshold Points (3, 3.5, 4, 4.5, 5)</strong>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="points3" class="form-label">Points for 3.0</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="points3"
+                           th:field="*{points3}" />
+                </div>
+                <div class="mb-3">
+                    <label for="points3_5" class="form-label">Points for 3.5</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="points3_5"
+                           th:field="*{points3_5}" />
+                </div>
+                <div class="mb-3">
+                    <label for="points4" class="form-label">Points for 4.0</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="points4"
+                           th:field="*{points4}" />
+                </div>
+                <div class="mb-3">
+                    <label for="points4_5" class="form-label">Points for 4.5</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="points4_5"
+                           th:field="*{points4_5}" />
+                </div>
+                <div class="mb-3">
+                    <label for="points5" class="form-label">Points for 5.0</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="points5"
+                           th:field="*{points5}" />
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="currentPoints" class="form-label">Current Points:</label>
-            <input type="number" step="0.01" class="form-control"
-                   id="currentPoints"
-                   th:field="*{currentPoints}"
-                   placeholder="Current points" />
+        <!-- ================== LABS FIELDS ================== -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>Labs</strong>
+                <button type="button" class="btn btn-sm btn-success" onclick="addLabRow()">+ Add Lab</button>
+            </div>
+            <div class="card-body" id="labsContainer">
+                <!--
+                  Wyświetlamy istniejące labs z listy (courseDto.labs),
+                  Każdy lab to labs[i].(pole).
+                 -->
+                <div th:each="lab, iStat : ${courseDto.labs}" class="mb-3 border rounded p-2">
+                    <div class="row g-2">
+                        <input type="hidden" th:field="*{labs[${iStat.index}].labNumber}" hidden/>
+                        <!-- lub można labNumber wystawić do edycji
+                             i nadać min=1, placeholder, itp.
+                        -->
+                        <div class="col-md-3">
+                            <label class="form-label">Lab Number</label>
+                            <input type="number" class="form-control"
+                                   th:field="*{labs[${iStat.index}].labNumber}" />
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{labs[${iStat.index}].description}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Min Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{labs[${iStat.index}].minPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Max Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{labs[${iStat.index}].maxPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">User Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{labs[${iStat.index}].userPoints}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control"
+                                   th:field="*{labs[${iStat.index}].date}" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Deadline</label>
+                            <input type="date" class="form-control"
+                                   th:field="*{labs[${iStat.index}].deadline}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- W razie potrzeby dodaj kolejne pola (labs points, projects points, etc.) -->
-
-        <button type="submit" class="btn btn-primary">Save Course</button>
-        <a th:href="@{/user/courses}" class="btn btn-secondary">Cancel</a>
+        <!-- BUTTONS -->
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save Course</button>
+            <a th:href="@{/user/courses}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </main>
 
@@ -60,6 +183,65 @@
         <small>&copy; 2025 Student Life Manager. All rights reserved.</small>
     </div>
 </footer>
+
+<!-- Minimalny skrypt do klonowania rzędu lab -->
+<script>
+    function addLabRow() {
+        // labsContainer to <div id="labsContainer">
+        const container = document.getElementById('labsContainer');
+
+        // Tworzymy pusty element (lub klon z hidden template) – tutaj w uproszczeniu wklejamy HTML
+        // W realnym projekcie lepiej klonować <template> albo generować dynamicznie index
+        const index = container.querySelectorAll('.mb-3.border').length;
+        const newDiv = document.createElement('div');
+        newDiv.className = 'mb-3 border rounded p-2';
+
+        newDiv.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-3">
+              <label class="form-label">Lab Number</label>
+              <input type="number" class="form-control"
+                     name="labs[${index}].labNumber"/>
+          </div>
+          <div class="col-md-9">
+              <label class="form-label">Description</label>
+              <input type="text" class="form-control"
+                     name="labs[${index}].description"/>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-4">
+              <label class="form-label">Min Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="labs[${index}].minPoints"/>
+          </div>
+          <div class="col-md-4">
+              <label class="form-label">Max Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="labs[${index}].maxPoints"/>
+          </div>
+          <div class="col-md-4">
+              <label class="form-label">User Points</label>
+              <input type="number" step="0.01" class="form-control"
+                     name="labs[${index}].userPoints"/>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control"
+                     name="labs[${index}].date"/>
+          </div>
+          <div class="col-md-6">
+              <label class="form-label">Deadline</label>
+              <input type="date" class="form-control"
+                     name="labs[${index}].deadline"/>
+          </div>
+        </div>
+    `;
+        container.appendChild(newDiv);
+    }
+</script>
 
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

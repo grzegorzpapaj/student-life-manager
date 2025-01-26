@@ -1,11 +1,17 @@
 package com.gpaqd.student_life_manager.service;
 
 import com.gpaqd.student_life_manager.dao.CourseRepository;
+import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
+import com.gpaqd.student_life_manager.dto.LabDTO;
 import com.gpaqd.student_life_manager.entity.Course;
+import com.gpaqd.student_life_manager.entity.Lab;
+import com.gpaqd.student_life_manager.entity.Threshold;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
+import com.gpaqd.student_life_manager.entity.pk.LabId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +19,12 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService{
 
     private CourseRepository courseRepository;
+    private ThresholdService thresholdService;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, ThresholdService thresholdService) {
         this.courseRepository = courseRepository;
+        this.thresholdService = thresholdService;
     }
 
     @Override
@@ -49,5 +57,82 @@ public class CourseServiceImpl implements CourseService{
         Course newCourse = new Course();
         newCourse.setId(new CourseId("", username));
         return newCourse;
+    }
+
+    @Override
+    public Course saveCourseWithDTO(CourseDetailsDTO dto, String username) {
+        Threshold thresholdToUse = findOrCreateThresholdToUse(dto);
+        Course courseToUse = createCourseObjectToUse(dto, username);
+
+        courseToUse.setThreshold(thresholdToUse);
+        Course savedCourse = courseRepository.save(courseToUse);
+
+
+        // to przeniesc do innej private funkcji addLabs np.
+
+        if (dto.getLabs() != null) {
+            for (LabDTO labDto : dto.getLabs()) {
+                if (labDto.getLabNumber() == null) {
+                    // pomijamy puste wiersze
+                    continue;
+                }
+                LabId labId = new LabId(
+                        dto.getCourseName(),
+                        username,
+                        labDto.getLabNumber()
+                );
+                Lab lab = new Lab(labId,
+                        labDto.getDescription(),
+                        labDto.getMinPoints() != null ? labDto.getMinPoints() : BigDecimal.ZERO,
+                        labDto.getUserPoints(),
+                        labDto.getMaxPoints() != null ? labDto.getMaxPoints() : BigDecimal.ZERO,
+                        labDto.getDate(),
+                        labDto.getDeadline());
+                // powiązanie z course
+                lab.setCourse(savedCourse);
+
+                savedCourse.addLab(lab);
+                // addLab() w encji Course ustawia lab.setCourse(this).
+            }
+        }
+
+        return courseRepository.save(courseToUse);
+    }
+
+    private Threshold findOrCreateThresholdToUse(CourseDetailsDTO dto) {
+        Threshold existingThreshold = thresholdService.findByAllPoints(
+                dto.getPoints3(), dto.getPoints3_5(),
+                dto.getPoints4(), dto.getPoints4_5(),
+                dto.getPoints5()
+        );
+
+        Threshold thresholdToUse;
+        if (existingThreshold != null) {
+            thresholdToUse = existingThreshold;
+        } else {
+            Threshold newThreshold = new Threshold(
+                    dto.getPoints3(), dto.getPoints3_5(),
+                    dto.getPoints4(), dto.getPoints4_5(),
+                    dto.getPoints5()
+            );
+            thresholdToUse = thresholdService.save(newThreshold);
+        }
+
+        return thresholdToUse;
+    }
+
+    private Course createCourseObjectToUse(CourseDetailsDTO dto, String username) {
+        CourseId courseId = new CourseId(dto.getCourseName(), username);
+        Course course = new Course();
+        course.setId(courseId);
+
+        course.setMinPoints(dto.getPoints3() != null ? dto.getPoints3() : BigDecimal.ZERO);
+        course.setCurrentPoints(dto.getCurrentPoints() != null ? dto.getCurrentPoints() : BigDecimal.ZERO);
+        course.setMinLabsPoints(dto.getMinLabsPoints());
+        course.setMinTestsPoints(dto.getMinTestsPoints());
+        course.setMinProjectsPoints(dto.getMinProjectsPoints());
+        course.setMinExamsPoints(dto.getMinExamsPoints());
+
+        return course;
     }
 }

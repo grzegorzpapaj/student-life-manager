@@ -1,5 +1,6 @@
 package com.gpaqd.student_life_manager.service;
 
+import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
 import com.gpaqd.student_life_manager.entity.Course;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 
@@ -18,4 +19,6 @@ public interface CourseService {
     void deleteById(CourseId id);
 
     Course createNewEmptyCourseForUser(String username);
+
+    Course saveCourseWithDTO(CourseDetailsDTO dto, String username);
 }
