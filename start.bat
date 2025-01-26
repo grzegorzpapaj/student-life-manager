@@ -1,27 +1,38 @@
+
 @echo off
-REM Exit immediately if a command fails
+REM Kontynuuj wykonywanie poleceń nawet jeśli niektóre z nich zakończą się błędem
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 set "ERROR_FLAG=0"
 
-echo Building PostgreSQL Docker image...
-docker build -t student-life-manager-postgres-image:1.0 .\database
-if ERRORLEVEL 1 set "ERROR_FLAG=1"
+echo Zatrzymywanie usług Docker Compose i usuwanie woluminów...
+docker-compose down -v
+if ERRORLEVEL 1 (
+    echo Błąd: Zatrzymywanie Docker Compose i usuwanie woluminów nie powiodło się.
+    set "ERROR_FLAG=1"
+)
 
-echo Building Application Docker image...
-docker build -t student-life-manager-app-image:1.0 .\student-life-manager-app
-if ERRORLEVEL 1 set "ERROR_FLAG=1"
+echo Usuwanie obrazu PostgreSQL...
+docker rmi student-life-manager-postgres-image:1.0
+if ERRORLEVEL 1 (
+    echo Błąd: Usuwanie obrazu PostgreSQL nie powiodło się.
+    set "ERROR_FLAG=1"
+)
 
-echo Starting Docker Compose services...
-docker-compose up -d
-if ERRORLEVEL 1 set "ERROR_FLAG=1"
+echo Usuwanie obrazu aplikacji...
+docker rmi student-life-manager-app-image:1.0
+if ERRORLEVEL 1 (
+    echo Błąd: Usuwanie obrazu aplikacji nie powiodło się.
+    set "ERROR_FLAG=1"
+)
 
-echo Listing running Docker containers...
-docker ps
-if ERRORLEVEL 1 set "ERROR_FLAG=1"
+echo Operacje zakończone.
 
-if %ERROR_FLAG%==1 (
-    echo An error occurred during execution.
+if "%ERROR_FLAG%"=="1" (
+    echo.
+    echo Wystąpiły błędy podczas wykonywania skryptu.
+    echo Proszę sprawdzić komunikaty powyżej.
     exit /b 1
 ) else (
-    echo Script executed successfully.
+    echo Wszystkie operacje zostały wykonane pomyślnie.
+    exit /b 0
 )
