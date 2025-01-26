@@ -39,4 +39,6 @@ public class LabServiceImpl implements LabService{
     public void deleteById(LabId id) {
         labRepository.deleteById(id);
     }
+
+    
 }

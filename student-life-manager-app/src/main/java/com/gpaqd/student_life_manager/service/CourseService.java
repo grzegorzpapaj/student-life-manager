@@ -21,4 +21,6 @@ public interface CourseService {
     Course createNewEmptyCourseForUser(String username);
 
     Course saveCourseWithDTO(CourseDetailsDTO dto, String username);
+
+    CourseDetailsDTO getCourseDetailsDTO(CourseId courseId);
 }

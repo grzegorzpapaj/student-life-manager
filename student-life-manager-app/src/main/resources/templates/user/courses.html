@@ -39,7 +39,13 @@
         </thead>
         <tbody>
         <tr th:each="course : ${courses}">
-            <td th:text="${course.id.courseName}">ExampleCourse</td>
+            <td>
+                <a th:href="@{|/user/courses/dashboard/${course.id.courseName}|}"
+                   th:text="${course.id.courseName}"
+                   class="text-decoration-none">
+                    ExampleCourse
+                </a>
+            </td>
             <td th:text="${course.currentPoints}">0</td>
             <td th:text="${course.minPoints}">0</td>
             <td>
