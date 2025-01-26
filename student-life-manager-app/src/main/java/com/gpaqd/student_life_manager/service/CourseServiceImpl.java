@@ -3,15 +3,18 @@ package com.gpaqd.student_life_manager.service;
 import com.gpaqd.student_life_manager.dao.CourseRepository;
 import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
 import com.gpaqd.student_life_manager.dto.LabDTO;
-import com.gpaqd.student_life_manager.entity.Course;
-import com.gpaqd.student_life_manager.entity.Lab;
-import com.gpaqd.student_life_manager.entity.Threshold;
+import com.gpaqd.student_life_manager.dto.MyTestDTO;
+import com.gpaqd.student_life_manager.dto.ProjectDTO;
+import com.gpaqd.student_life_manager.entity.*;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 import com.gpaqd.student_life_manager.entity.pk.LabId;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
+import com.gpaqd.student_life_manager.entity.pk.ProjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,8 +72,10 @@ public class CourseServiceImpl implements CourseService{
         Course savedCourse = courseRepository.save(courseToUse);
 
         Course courseWithLabs = addLabs(dto, savedCourse, username);
+        Course courseWithTests = addTests(dto, courseWithLabs, username);
+        Course courseWithProjects = addProjects(dto, courseWithTests, username);
 
-        return courseRepository.save(courseWithLabs);
+        return courseRepository.save(courseWithProjects);
     }
 
      @Override
@@ -124,6 +129,66 @@ public class CourseServiceImpl implements CourseService{
         return savedCourse;
     }
 
+    private Course addProjects(CourseDetailsDTO dto, Course savedCourse, String username) {
+        if (dto.getProjects() != null) {
+            for (ProjectDTO projectDto : dto.getProjects()) {
+                if (projectDto.getProjectNumber() == null) {
+                    continue;
+                }
+                ProjectId projectId = new ProjectId(
+                        savedCourse.getId().getCourseName(),
+                        username,
+                        projectDto.getProjectNumber()
+                );
+
+                Project project = new Project(
+                        projectId,
+                        projectDto.getDescription(),
+                        projectDto.getMinPoints() != null ? projectDto.getMinPoints() : BigDecimal.ZERO,
+                        projectDto.getUserPoints(),
+                        projectDto.getMaxPoints() != null ? projectDto.getMaxPoints() : BigDecimal.ZERO,
+                        projectDto.getDeadline()
+                );
+
+                project.setCourse(savedCourse);
+                savedCourse.addProject(project);
+            }
+        }
+        return savedCourse;
+    }
+
+
+    private Course addTests(CourseDetailsDTO dto, Course savedCourse, String username) {
+        if (dto.getMyTests() != null) {
+            for (MyTestDTO testDto : dto.getMyTests()) {
+                if (testDto.getTestNumber() == null) {
+                    // pomijamy puste wiersze
+                    continue;
+                }
+
+                MyTestId myTestId = new MyTestId(
+                        savedCourse.getId().getCourseName(),
+                        username,
+                        testDto.getTestNumber()
+                );
+
+                MyTest test = new MyTest(
+                        myTestId,
+                        testDto.getDescription(),
+                        testDto.getMinPoints() != null ? testDto.getMinPoints() : BigDecimal.ZERO,
+                        testDto.getUserPoints(),
+                        testDto.getMaxPoints() != null ? testDto.getMaxPoints() : BigDecimal.ZERO,
+                        testDto.getDate() != null ? testDto.getDate() : LocalDate.now(),
+                        testDto.isExam()
+                );
+
+                test.setCourse(savedCourse);
+                savedCourse.addMyTest(test);
+                // addMyTest() w encji Course ustawia test.setCourse(this).
+            }
+        }
+        return savedCourse;
+    }
 
 
     private Threshold findOrCreateThresholdToUse(CourseDetailsDTO dto) {

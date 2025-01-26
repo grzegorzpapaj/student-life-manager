@@ -27,6 +27,14 @@ public class CourseDetailsDTO {
 
     private List<LabDTO> labs = new ArrayList<>();
 
+    // Tests
+
+    private List<MyTestDTO> myTests = new ArrayList<>();
+
+    // Projects
+
+    private List<ProjectDTO> projects = new ArrayList<>();
+
     // Getters and setters
 
     public String getCourseName() {
@@ -131,5 +139,21 @@ public class CourseDetailsDTO {
 
     public void setLabs(List<LabDTO> labs) {
         this.labs = labs;
+    }
+
+    public List<MyTestDTO> getMyTests() {
+        return myTests;
+    }
+
+    public void setMyTests(List<MyTestDTO> myTests) {
+        this.myTests = myTests;
+    }
+
+    public List<ProjectDTO> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<ProjectDTO> projects) {
+        this.projects = projects;
     }
 }
