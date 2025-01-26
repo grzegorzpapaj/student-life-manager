@@ -60,4 +60,10 @@ public class AuthController {
         model.addAttribute("error", "Username already taken!");
         return "/auth/register";
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/auth/login";
+    }
 }
