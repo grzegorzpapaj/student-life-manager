@@ -22,18 +22,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Example nav links -->
+                <!-- Dashboard link -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/courses}">Courses</a>
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
                 </li>
+                <!-- Courses link -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/labs}">Labs</a>
+                    <a class="nav-link" th:href="@{/courses}">Courses</a>
                 </li>
+                <!-- Sign Out button -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/projects}">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/tests}">Tests</a>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
+                    </form>
                 </li>
             </ul>
         </div>

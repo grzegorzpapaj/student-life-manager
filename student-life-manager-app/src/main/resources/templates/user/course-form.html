@@ -13,7 +13,30 @@
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/user/dashboard}">Student Life Manager</a>
+        <a class="navbar-brand" th:href="@{/}">Student Life Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Dashboard link -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <!-- Courses link -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/courses}">Courses</a>
+                </li>
+                <!-- Sign Out button -->
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
