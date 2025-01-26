@@ -3,15 +3,19 @@ package com.gpaqd.student_life_manager.service;
 import com.gpaqd.student_life_manager.dao.CourseRepository;
 import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
 import com.gpaqd.student_life_manager.dto.LabDTO;
+import com.gpaqd.student_life_manager.dto.MyTestDTO;
 import com.gpaqd.student_life_manager.entity.Course;
 import com.gpaqd.student_life_manager.entity.Lab;
+import com.gpaqd.student_life_manager.entity.MyTest;
 import com.gpaqd.student_life_manager.entity.Threshold;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 import com.gpaqd.student_life_manager.entity.pk.LabId;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,8 +72,9 @@ public class CourseServiceImpl implements CourseService{
         Course savedCourse = courseRepository.save(courseToUse);
 
         Course courseWithLabs = addLabs(dto, savedCourse, username);
+        Course courseWithTests = addTests(dto, courseWithLabs, username);
 
-        return courseRepository.save(courseWithLabs);
+        return courseRepository.save(courseWithTests);
     }
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
@@ -101,6 +106,37 @@ public class CourseServiceImpl implements CourseService{
         return savedCourse;
     }
 
+    private Course addTests(CourseDetailsDTO dto, Course savedCourse, String username) {
+        if (dto.getMyTests() != null) {
+            for (MyTestDTO testDto : dto.getMyTests()) {
+                if (testDto.getTestNumber() == null) {
+                    // pomijamy puste wiersze
+                    continue;
+                }
+
+                MyTestId myTestId = new MyTestId(
+                        savedCourse.getId().getCourseName(),
+                        username,
+                        testDto.getTestNumber()
+                );
+
+                MyTest test = new MyTest(
+                        myTestId,
+                        testDto.getDescription(),
+                        testDto.getMinPoints() != null ? testDto.getMinPoints() : BigDecimal.ZERO,
+                        testDto.getUserPoints(),
+                        testDto.getMaxPoints() != null ? testDto.getMaxPoints() : BigDecimal.ZERO,
+                        testDto.getDate() != null ? testDto.getDate() : LocalDate.now(),
+                        testDto.isExam()
+                );
+
+                test.setCourse(savedCourse);
+                savedCourse.addMyTest(test);
+                // addMyTest() w encji Course ustawia test.setCourse(this).
+            }
+        }
+        return savedCourse;
+    }
 
 
     private Threshold findOrCreateThresholdToUse(CourseDetailsDTO dto) {

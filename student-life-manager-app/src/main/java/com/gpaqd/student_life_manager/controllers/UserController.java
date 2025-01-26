@@ -43,8 +43,6 @@ public class UserController {
         User user = userService.findById(loggedInUser);
         model.addAttribute("user", user);
 
-        System.out.println("teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesssssssssst");
-
         return "/user/dashboard";
     }
 
@@ -79,9 +77,8 @@ public class UserController {
     public String processAddCourse(@ModelAttribute("courseDto") CourseDetailsDTO dto, HttpSession session) {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
 
-        System.out.println(dto.getLabs());
-
         courseService.saveCourseWithDTO(dto, loggedInUser);
+        System.out.println(dto.getMyTests().getFirst().getDescription());
         return "redirect:/user/courses";
     }
 }

@@ -7,7 +7,6 @@
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
     >
 </head>
@@ -170,6 +169,64 @@
             </div>
         </div>
 
+        <!-- ================== TESTS FIELDS ================== -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>Tests</strong>
+                <button type="button" class="btn btn-sm btn-success" onclick="addTestRow()">+ Add Test</button>
+            </div>
+            <div class="card-body" id="testsContainer">
+
+                <div th:each="test, iStat : ${courseDto.myTests}" class="mb-3 border rounded p-2">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label class="form-label">Test Number</label>
+                            <input type="number" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].testNumber}" />
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].description}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Min Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].minPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Max Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].maxPoints}" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">User Points</label>
+                            <input type="number" step="0.01" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].userPoints}" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control"
+                                   th:field="*{myTests[${iStat.index}].date}" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Is Exam?</label>
+                            <input type="checkbox" class="form-check-input ms-2"
+                                   th:field="*{myTests[${iStat.index}].exam}" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
         <!-- BUTTONS -->
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Save Course</button>
@@ -239,6 +296,61 @@
           </div>
         </div>
     `;
+        container.appendChild(newDiv);
+    }
+
+    function addTestRow() {
+        const container = document.getElementById('testsContainer');
+        const index = container.querySelectorAll('.mb-3.border').length;
+
+        const newDiv = document.createElement('div');
+        newDiv.className = 'mb-3 border rounded p-2';
+
+        // Generujemy inputy z name="myTests[<index>].pole"
+        newDiv.innerHTML = `
+        <div class="row g-2">
+            <div class="col-md-3">
+                <label class="form-label">Test Number</label>
+                <input type="number" class="form-control"
+                       name="myTests[${index}].testNumber"/>
+            </div>
+            <div class="col-md-9">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control"
+                       name="myTests[${index}].description"/>
+            </div>
+        </div>
+        <div class="row g-2 mt-2">
+            <div class="col-md-4">
+                <label class="form-label">Min Points</label>
+                <input type="number" step="0.01" class="form-control"
+                       name="myTests[${index}].minPoints"/>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Max Points</label>
+                <input type="number" step="0.01" class="form-control"
+                       name="myTests[${index}].maxPoints"/>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">User Points</label>
+                <input type="number" step="0.01" class="form-control"
+                       name="myTests[${index}].userPoints"/>
+            </div>
+        </div>
+        <div class="row g-2 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control"
+                       name="myTests[${index}].date"/>
+            </div>
+            <div class="col-md-6 align-self-center">
+                <label class="form-check-label me-2">Is Exam?</label>
+                <input type="checkbox" class="form-check-input"
+                       name="myTests[${index}].exam"/>
+            </div>
+        </div>
+    `;
+
         container.appendChild(newDiv);
     }
 </script>
