@@ -89,7 +89,11 @@ public class CourseServiceImpl implements CourseService{
         CourseDetailsDTO dtoWithCourseInfo = setDtoInfoFromCourse(dto, course);
 
         List<LabDTO> labDTOs = course.getLabs().stream().map(this::convertLabToDTO).collect(Collectors.toList());
+        List<MyTestDTO> myTestDTOs = course.getMyTests().stream().map(this::convertMyTestToDTO).collect(Collectors.toList());
+        List<ProjectDTO> projectDTOs = course.getProjects().stream().map(this::convertProjectToDTO).collect(Collectors.toList());
         dtoWithCourseInfo.setLabs(labDTOs);
+        dtoWithCourseInfo.setMyTests(myTestDTOs);
+        dtoWithCourseInfo.setProjects(projectDTOs);
 
         return dtoWithCourseInfo;
     }
@@ -270,6 +274,29 @@ public class CourseServiceImpl implements CourseService{
         labDTO.setDate(lab.getDate());
         labDTO.setDeadline(lab.getDeadline());
         return labDTO;
+    }
+
+    private MyTestDTO convertMyTestToDTO(MyTest myTest) {
+        MyTestDTO myTestDto = new MyTestDTO();
+        myTestDto.setTestNumber(myTest.getId().getMyTestNumber());
+        myTestDto.setDescription(myTest.getDescription());
+        myTestDto.setMinPoints(myTest.getMinPoints());
+        myTestDto.setMaxPoints(myTest.getMaxPoints());
+        myTestDto.setUserPoints(myTest.getUserPoints());
+        myTestDto.setDate(myTest.getDate());
+        myTestDto.setExam(myTest.isExam());
+        return myTestDto;
+    }
+
+    private ProjectDTO convertProjectToDTO(Project project) {
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setProjectNumber(project.getId().getProjectNumber());
+        projectDTO.setDescription(project.getDescription());
+        projectDTO.setMinPoints(project.getMinPoints());
+        projectDTO.setMaxPoints(project.getMaxPoints());
+        projectDTO.setUserPoints(project.getUserPoints());
+        projectDTO.setDeadline(project.getDeadline());
+        return projectDTO;
     }
 
     private Course setCoursePoints(Course course, CourseDetailsDTO dto) {

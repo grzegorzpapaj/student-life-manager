@@ -211,12 +211,12 @@
                         <div class="col-md-3">
                             <label class="form-label">Test Number</label>
                             <input type="number" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].testNumber}" />
+                                   th:field="*{myTests[__${iStat.index}__].testNumber}" />
                         </div>
                         <div class="col-md-9">
                             <label class="form-label">Description</label>
                             <input type="text" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].description}" />
+                                   th:field="*{myTests[__${iStat.index}__].description}" />
                         </div>
                     </div>
 
@@ -224,17 +224,17 @@
                         <div class="col-md-4">
                             <label class="form-label">Min Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].minPoints}" />
+                                   th:field="*{myTests[__${iStat.index}__].minPoints}" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Max Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].maxPoints}" />
+                                   th:field="*{myTests[__${iStat.index}__].maxPoints}" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">User Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].userPoints}" />
+                                   th:field="*{myTests[__${iStat.index}__].userPoints}" />
                         </div>
                     </div>
 
@@ -242,12 +242,12 @@
                         <div class="col-md-6">
                             <label class="form-label">Date</label>
                             <input type="date" class="form-control"
-                                   th:field="*{myTests[${iStat.index}].date}" />
+                                   th:field="*{myTests[__${iStat.index}__].date}" />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Is Exam?</label>
                             <input type="checkbox" class="form-check-input ms-2"
-                                   th:field="*{myTests[${iStat.index}].exam}" />
+                                   th:field="*{myTests[__${iStat.index}__].exam}" />
                         </div>
                     </div>
                 </div>
@@ -267,12 +267,12 @@
                         <div class="col-md-3">
                             <label class="form-label">Project Number</label>
                             <input type="number" class="form-control"
-                                   th:field="*{projects[${iStat.index}].projectNumber}" />
+                                   th:field="*{projects[__${iStat.index}__].projectNumber}" />
                         </div>
                         <div class="col-md-9">
                             <label class="form-label">Description</label>
                             <input type="text" class="form-control"
-                                   th:field="*{projects[${iStat.index}].description}" />
+                                   th:field="*{projects[__${iStat.index}__].description}" />
                         </div>
                     </div>
 
@@ -280,17 +280,17 @@
                         <div class="col-md-4">
                             <label class="form-label">Min Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{projects[${iStat.index}].minPoints}" />
+                                   th:field="*{projects[__${iStat.index}__].minPoints}" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Max Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{projects[${iStat.index}].maxPoints}" />
+                                   th:field="*{projects[__${iStat.index}__].maxPoints}" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">User Points</label>
                             <input type="number" step="0.01" class="form-control"
-                                   th:field="*{projects[${iStat.index}].userPoints}" />
+                                   th:field="*{projects[__${iStat.index}__].userPoints}" />
                         </div>
                     </div>
 
@@ -298,7 +298,7 @@
                         <div class="col-md-12">
                             <label class="form-label">Deadline</label>
                             <input type="date" class="form-control"
-                                   th:field="*{projects[${iStat.index}].deadline}" />
+                                   th:field="*{projects[__${iStat.index}__].deadline}" />
                         </div>
                     </div>
                 </div>
