@@ -78,7 +78,7 @@ public class CourseServiceImpl implements CourseService{
         return courseRepository.save(courseWithProjects);
     }
 
-     @Override
+    @Override
     public CourseDetailsDTO getCourseDetailsDTO(CourseId courseId) {
         Course course = courseRepository.findById(courseId).orElse(null);
         if (course == null) {
@@ -94,11 +94,58 @@ public class CourseServiceImpl implements CourseService{
         dto.setMinProjectsPoints(course.getMinProjectsPoints());
         dto.setMinExamsPoints(course.getMinExamsPoints());
 
-        List<LabDTO> labDTOs = course.getLabs().stream().map(this::convertLabToDTO).collect(Collectors.toList());
+        // Convert Labs to DTOs
+        List<LabDTO> labDTOs = course.getLabs().stream()
+            .map(this::convertLabToDTO)
+            .collect(Collectors.toList());
         dto.setLabs(labDTOs);
+
+        // Convert MyTests to DTOs
+        List<MyTestDTO> testDTOs = course.getMyTests().stream()
+            .map(this::convertMyTestToDTO)
+            .collect(Collectors.toList());
+        dto.setMyTests(testDTOs);
+
+        // Convert Projects to DTOs
+        List<ProjectDTO> projectDTOs = course.getProjects().stream()
+            .map(this::convertProjectToDTO)
+            .collect(Collectors.toList());
+        dto.setProjects(projectDTOs);
+
+        // Optionally set threshold points if applicable
+        dto.setPoints3(course.getThreshold().getPoints3());
+        dto.setPoints3_5(course.getThreshold().getPoints3_5());
+        dto.setPoints4(course.getThreshold().getPoints4());
+        dto.setPoints4_5(course.getThreshold().getPoints4_5());
+        dto.setPoints5(course.getThreshold().getPoints5());
 
         return dto;
     }
+
+// Conversion methods
+private MyTestDTO convertMyTestToDTO(MyTest test) {
+    MyTestDTO dto = new MyTestDTO();
+    dto.setTestNumber(test.getId().getMyTestNumber());
+    dto.setDescription(test.getDescription());
+    dto.setMinPoints(test.getMinPoints());
+    dto.setUserPoints(test.getUserPoints());
+    dto.setMaxPoints(test.getMaxPoints());
+    dto.setDate(test.getDate());
+    dto.setExam(test.isExam());
+    return dto;
+}
+
+private ProjectDTO convertProjectToDTO(Project project) {
+    ProjectDTO dto = new ProjectDTO();
+    dto.setProjectNumber(project.getId().getProjectNumber());
+    dto.setDescription(project.getDescription());
+    dto.setMinPoints(project.getMinPoints());
+    dto.setUserPoints(project.getUserPoints());
+    dto.setMaxPoints(project.getMaxPoints());
+    dto.setDeadline(project.getDeadline());
+    return dto;
+}
+
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
         if (dto.getLabs() != null) {
