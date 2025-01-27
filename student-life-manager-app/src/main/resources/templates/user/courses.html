@@ -54,7 +54,7 @@
             <th>Course Name</th>
             <th>Current Points</th>
             <th>Min Points</th>
-            <!-- Dodaj kolumny wg potrzeb (np. project/test/exam) -->
+            <th>Grade</th>  
             <th>Actions</th>
         </tr>
         </thead>
@@ -69,6 +69,7 @@
             </td>
             <td th:text="${course.currentPoints}">0</td>
             <td th:text="${course.minPoints}">0</td>
+            <td th:text="${course.grade}">N/A</td>
             <td>
                 <!-- Przykład przycisku edycji -->
                 <a class="btn btn-primary btn-sm"

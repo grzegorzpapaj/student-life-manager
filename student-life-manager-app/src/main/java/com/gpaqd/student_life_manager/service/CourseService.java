@@ -5,6 +5,7 @@ import com.gpaqd.student_life_manager.entity.Course;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 public interface CourseService {
 
@@ -27,4 +28,8 @@ public interface CourseService {
     CourseDetailsDTO getEditCourseDetailsDTO(String username, String courseName);
 
     Course updateCourseWithDTO(CourseDetailsDTO dto, String username);
+
+    BigDecimal calculateTotalPoints(Course course);
+
+    String determineGrade(Course course, BigDecimal totalPoints);
 }

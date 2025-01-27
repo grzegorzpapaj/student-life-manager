@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.math.BigDecimal;
+
 
 @Controller
 @RequestMapping("/user")
@@ -64,6 +66,18 @@ public class UserController {
         }
 
         List<Course> courses = courseService.findAllByUser(loggedInUser);
+
+    
+        for (Course course : courses) {
+            BigDecimal totalPoints = courseService.calculateTotalPoints(course);
+            course.setCurrentPoints(totalPoints);
+
+            String determinedGrade = courseService.determineGrade(course, totalPoints);
+            course.setGrade(determinedGrade);
+        }
+
+
+
         model.addAttribute("courses", courses);
 
         return "/user/courses";
@@ -102,13 +116,22 @@ public class UserController {
         }
 
         CourseId courseId = new CourseId(courseName, loggedInUser);
+        //znajdz normalny course po id
         
         CourseDetailsDTO courseDto = courseService.getCourseDetailsDTO(courseId);
+        Course course = courseService.findById(courseId);
 
         if (courseDto == null) {
             // Handle course not found, possibly redirect with an error message
             return "redirect:/user/courses?error=CourseNotFound";
         }
+
+        BigDecimal totalPoints = courseService.calculateTotalPoints(course);
+        courseDto.setCurrentPoints(totalPoints);
+
+        String determinedGrade = courseService.determineGrade(course, totalPoints);
+        courseDto.setGrade(determinedGrade);
+    
 
         model.addAttribute("course", courseDto);
         // Add any additional attributes needed for the dashboard

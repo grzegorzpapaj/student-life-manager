@@ -3,6 +3,7 @@ package com.gpaqd.student_life_manager.dto;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
 public class CourseDetailsDTO {
 
@@ -60,6 +61,12 @@ public class CourseDetailsDTO {
     public void setCurrentPoints(BigDecimal currentPoints) {
         this.currentPoints = currentPoints;
     }
+
+    @Transient
+    private String grade;
+
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
 
     public BigDecimal getMinLabsPoints() {
         return minLabsPoints;
