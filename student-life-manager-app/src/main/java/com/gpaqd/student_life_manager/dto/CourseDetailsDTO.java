@@ -35,6 +35,15 @@ public class CourseDetailsDTO {
 
     private List<ProjectDTO> projects = new ArrayList<>();
 
+    public CourseDetailsDTO() {
+        // default values
+        this.points3 = BigDecimal.valueOf(51);
+        this.points3_5 = BigDecimal.valueOf(61);
+        this.points4 = BigDecimal.valueOf(71);
+        this.points4_5 = BigDecimal.valueOf(81);
+        this.points5 = BigDecimal.valueOf(91);
+    }
+
     // Getters and setters
 
     public String getCourseName() {
