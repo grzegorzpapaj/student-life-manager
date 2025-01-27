@@ -275,6 +275,25 @@ public class CourseServiceImpl implements CourseService{
 
 
     private Threshold findOrCreateThresholdToUse(CourseDetailsDTO dto) {
+
+        // ---------------------------------------------
+        // PRZENIESC TO DO INNEJ FUNKCJI
+
+//        BigDecimal default3   = new BigDecimal("51");
+//        BigDecimal default3_5 = new BigDecimal("61");
+//        BigDecimal default4   = new BigDecimal("71");
+//        BigDecimal default4_5 = new BigDecimal("81");
+//        BigDecimal default5   = new BigDecimal("91");
+//
+//        // 2. Jeśli w DTO nie ma wartości, wstaw domyślną
+//        BigDecimal p3   = (dto.getPoints3()   != null) ? dto.getPoints3()   : default3;
+//        BigDecimal p3_5 = (dto.getPoints3_5() != null) ? dto.getPoints3_5() : default3_5;
+//        BigDecimal p4   = (dto.getPoints4()   != null) ? dto.getPoints4()   : default4;
+//        BigDecimal p4_5 = (dto.getPoints4_5() != null) ? dto.getPoints4_5() : default4_5;
+//        BigDecimal p5   = (dto.getPoints5()   != null) ? dto.getPoints5()   : default5;
+
+        // ----------------------------------------------
+
         Threshold existingThreshold = thresholdService.findByAllPoints(
                 dto.getPoints3(), dto.getPoints3_5(),
                 dto.getPoints4(), dto.getPoints4_5(),
