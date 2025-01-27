@@ -2,9 +2,16 @@ package com.gpaqd.student_life_manager.controllers;
 
 
 import com.gpaqd.student_life_manager.dto.CourseDetailsDTO;
+import com.gpaqd.student_life_manager.service.DeadlineService;
 import com.gpaqd.student_life_manager.entity.Course;
+import com.gpaqd.student_life_manager.entity.Project;
+import com.gpaqd.student_life_manager.entity.Lab;
+import com.gpaqd.student_life_manager.entity.MyTest;
 import com.gpaqd.student_life_manager.entity.User;
 import com.gpaqd.student_life_manager.entity.pk.CourseId;
+import com.gpaqd.student_life_manager.entity.pk.ProjectId;
+import com.gpaqd.student_life_manager.entity.pk.LabId;
+import com.gpaqd.student_life_manager.entity.pk.MyTestId;
 import com.gpaqd.student_life_manager.service.CourseService;
 import com.gpaqd.student_life_manager.service.CourseServiceImpl;
 import com.gpaqd.student_life_manager.service.UserService;
@@ -26,26 +33,28 @@ public class UserController {
 
     private final UserService userService;
     private final CourseService courseService;
+    private final DeadlineService deadlineService;
 
     @Autowired
-    public UserController(UserService userService, CourseService courseService) {
+    public UserController(UserService userService, CourseService courseService, DeadlineService deadlineService) {
         this.userService = userService;
         this.courseService = courseService;
+        this.deadlineService = deadlineService;
     }
 
-    @GetMapping("/dashboard")
-    public String showDashboard(Model model, HttpSession session) {
-        String loggedInUser = (String) session.getAttribute("loggedInUser");
+    // @GetMapping("/dashboard")
+    // public String showDashboard(Model model, HttpSession session) {
+    //     String loggedInUser = (String) session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/auth/login";
-        }
+    //     if (loggedInUser == null) {
+    //         return "redirect:/auth/login";
+    //     }
 
-        User user = userService.findById(loggedInUser);
-        model.addAttribute("user", user);
+    //     User user = userService.findById(loggedInUser);
+    //     model.addAttribute("user", user);
 
-        return "/user/dashboard";
-    }
+    //     return "/user/dashboard";
+    // }
 
     @GetMapping("/courses")
     public String showCourses(Model model, HttpSession session) {
@@ -110,5 +119,33 @@ public class UserController {
 
         return "user/course-dashboard"; // Path to your course dashboard Thymeleaf template
     }
+
+    @GetMapping("/dashboard")
+    public String showDashboard(Model model, HttpSession session) {
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/auth/login";
+        }
+
+        User user = userService.findById(loggedInUser);
+        model.addAttribute("user", user);
+
+        // Using the DeadlineService
+        List<MyTest> next2Tests = deadlineService.getNext2Tests(loggedInUser);
+        List<Project> next2Projects = deadlineService.getNext2Projects(loggedInUser);
+        List<Lab> next2Labs = deadlineService.getNext2Labs(loggedInUser);
+
+        System.out.println("----------------------------------------------------------------------------");
+        System.out.println(next2Tests);
+        System.out.println(next2Projects);
+        System.out.println(next2Labs);
+        System.out.println("----------------------------------------------------------------------------");
+
+        model.addAttribute("next2Tests", next2Tests);
+        model.addAttribute("next2Projects", next2Projects);
+        model.addAttribute("next2Labs", next2Labs);
+
+        return "user/dashboard";
+}
 
 }

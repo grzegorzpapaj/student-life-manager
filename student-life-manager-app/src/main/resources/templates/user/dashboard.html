@@ -52,8 +52,8 @@
         Your password: <span th:text="${user.password}">Password</span>
     </p>
 
-    <!-- or show upcoming deadlines, courses etc. -->
     <div class="row">
+        <!-- Left Column (Courses) -->
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">Courses</div>
@@ -65,7 +65,89 @@
                 </div>
             </div>
         </div>
-        <!-- Add more cards (Labs, Projects, Tests) as needed -->
+
+        <!-- Right Column (Upcoming Deadlines) -->
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-header">
+                    Upcoming Deadlines
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Deadlines (Up to 2)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- Row for TESTS -->
+                            <tr>
+                                <td>Tests</td>
+                                <td>
+                                    <ul>
+                                        <li th:each="test : ${next2Tests}">
+                                            <span th:text="'Test #' 
+                                                + ${test.id.myTestNumber} 
+                                                + ': '
+                                                + ${test.id.courseName}
+                                                + ' (' 
+                                                + ${#temporals.format(test.date, 'yyyy-MM-dd')} 
+                                                + ')'">
+                                                Test #1 (2025-01-10)
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <!-- Row for PROJECTS -->
+                            <tr>
+                                <td>Projects</td>
+                                <td>
+                                    <ul>
+                                        <li th:each="proj : ${next2Projects}">
+                                            <span th:text="'Project #' 
+                                                + ${proj.id.projectNumber} 
+                                                + ': '
+                                                + ${proj.id.getCourseName}
+                                                + ' (' 
+                                                + ${#temporals.format(proj.deadline, 'yyyy-MM-dd')} 
+                                                + ')'">
+                                                Project #1 (2025-02-05)
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <!-- Row for LABS -->
+                            <tr>
+                                <td>Labs</td>
+                                <td>
+                                    <ul>
+                                        <li th:each="lab : ${next2Labs}">
+                                            <span th:text="'Lab #' 
+                                                + ${lab.id.labNumber} 
+                                                + ': '
+                                                + ${lab.id.getCourseName}
+                                                + ' (' 
+                                                + ${#temporals.format(lab.deadline, 'yyyy-MM-dd')} 
+                                                + ')'">
+                                                Lab #2 (2025-01-15)
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
 
