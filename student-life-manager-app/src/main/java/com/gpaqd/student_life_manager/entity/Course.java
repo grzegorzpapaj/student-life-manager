@@ -193,4 +193,10 @@ public class Course {
         labs.remove(lab);
         lab.setCourse(null);
     }
+
+    @Transient
+    private String grade;
+
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
 }

@@ -132,6 +132,55 @@ public class CourseServiceImpl implements CourseService{
         return courseRepository.save(existingCourse);
     }
 
+     @Override
+    public BigDecimal calculateTotalPoints(Course course) {
+        // Sum up labs
+        BigDecimal labsTotal = course.getLabs().stream()
+            .map(lab -> lab.getUserPoints() != null ? lab.getUserPoints() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Sum up tests (including exams if isExam == true)
+        BigDecimal testsTotal = course.getMyTests().stream()
+            .map(test -> test.getUserPoints() != null ? test.getUserPoints() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Sum up projects
+        BigDecimal projectsTotal = course.getProjects().stream()
+            .map(project -> project.getUserPoints() != null ? project.getUserPoints() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return labsTotal.add(testsTotal).add(projectsTotal);
+    }
+
+    @Override
+    public String determineGrade(Course course, BigDecimal totalPoints) {
+        // If total points are below the course's min points => grade = "2"
+        // if (totalPoints.compareTo(course.getMinPoints()) < 0) {
+        //     return "2";
+        // }
+
+        Threshold threshold = course.getThreshold(); // e.g. threshold_id -> Threshold object
+        if (threshold == null) {
+            // If there's no threshold row, return something default
+            return "N/A";
+        }
+
+        // Compare from highest to lowest
+        if (totalPoints.compareTo(threshold.getPoints5()) >= 0) {
+            return "5";
+        } else if (totalPoints.compareTo(threshold.getPoints4_5()) >= 0) {
+            return "4.5";
+        } else if (totalPoints.compareTo(threshold.getPoints4()) >= 0) {
+            return "4";
+        } else if (totalPoints.compareTo(threshold.getPoints3_5()) >= 0) {
+            return "3.5";
+        } else if (totalPoints.compareTo(threshold.getPoints3()) >= 0) {
+            return "3";
+        } else {
+            return "2"; // fallback
+        }
+    }
+
 
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
