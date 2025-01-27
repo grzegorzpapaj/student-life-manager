@@ -78,7 +78,7 @@ public class CourseServiceImpl implements CourseService{
         return courseRepository.save(courseWithProjects);
     }
 
-     @Override
+    @Override
     public CourseDetailsDTO getCourseDetailsDTO(CourseId courseId) {
         Course course = courseRepository.findById(courseId).orElse(null);
         if (course == null) {
@@ -86,19 +86,49 @@ public class CourseServiceImpl implements CourseService{
         }
 
         CourseDetailsDTO dto = new CourseDetailsDTO();
-        dto.setCourseName(course.getId().getCourseName());
-        dto.setCurrentPoints(course.getCurrentPoints());
-        dto.setMinPoints(course.getMinPoints());
-        dto.setMinLabsPoints(course.getMinLabsPoints());
-        dto.setMinTestsPoints(course.getMinTestsPoints());
-        dto.setMinProjectsPoints(course.getMinProjectsPoints());
-        dto.setMinExamsPoints(course.getMinExamsPoints());
+        CourseDetailsDTO dtoWithCourseInfo = setDtoInfoFromCourse(dto, course);
 
         List<LabDTO> labDTOs = course.getLabs().stream().map(this::convertLabToDTO).collect(Collectors.toList());
-        dto.setLabs(labDTOs);
+        dtoWithCourseInfo.setLabs(labDTOs);
 
-        return dto;
+        return dtoWithCourseInfo;
     }
+
+    @Override
+    public CourseDetailsDTO getEditCourseDetailsDTO(String username, String courseName) {
+        CourseId courseId = new CourseId(courseName, username);
+        return getCourseDetailsDTO(courseId);
+    }
+
+    @Override
+    public Course updateCourseWithDTO(CourseDetailsDTO dto, String username) {
+        CourseId courseId = new CourseId(dto.getCourseName(), username);
+
+        Course existingCourse = courseRepository.findById(courseId).orElse(null);
+
+        // update fields
+        Course updatedCourse = setCoursePoints(existingCourse, dto);
+
+        // threshold
+        Threshold thr = findOrCreateThresholdToUse(dto);
+
+        updatedCourse.setThreshold(thr);
+
+        // labs, tests, projects:
+        // 1) Wczytaj bieżące z existingCourse
+        // 2) Wyczyść / usuń
+        existingCourse.getLabs().clear();
+        existingCourse.getMyTests().clear();
+        existingCourse.getProjects().clear();
+        // 3) addLabs(dto, existingCourse, username) itp.
+        addLabs(dto, existingCourse, username);
+        addTests(dto, existingCourse, username);
+        addProjects(dto, existingCourse, username);
+
+        return courseRepository.save(existingCourse);
+    }
+
+
 
     private Course addLabs(CourseDetailsDTO dto, Course savedCourse, String username) {
         if (dto.getLabs() != null) {
@@ -218,14 +248,14 @@ public class CourseServiceImpl implements CourseService{
         Course course = new Course();
         course.setId(courseId);
 
-        course.setMinPoints(dto.getPoints3() != null ? dto.getPoints3() : BigDecimal.ZERO);
-        course.setCurrentPoints(dto.getCurrentPoints() != null ? dto.getCurrentPoints() : BigDecimal.ZERO);
-        course.setMinLabsPoints(dto.getMinLabsPoints());
-        course.setMinTestsPoints(dto.getMinTestsPoints());
-        course.setMinProjectsPoints(dto.getMinProjectsPoints());
-        course.setMinExamsPoints(dto.getMinExamsPoints());
+//        course.setMinPoints(dto.getPoints3() != null ? dto.getPoints3() : BigDecimal.ZERO);
+//        course.setCurrentPoints(dto.getCurrentPoints() != null ? dto.getCurrentPoints() : BigDecimal.ZERO);
+//        course.setMinLabsPoints(dto.getMinLabsPoints());
+//        course.setMinTestsPoints(dto.getMinTestsPoints());
+//        course.setMinProjectsPoints(dto.getMinProjectsPoints());
+//        course.setMinExamsPoints(dto.getMinExamsPoints());
 
-        return course;
+        return setCoursePoints(course, dto);
     }
 
     
@@ -241,4 +271,35 @@ public class CourseServiceImpl implements CourseService{
         labDTO.setDeadline(lab.getDeadline());
         return labDTO;
     }
+
+    private Course setCoursePoints(Course course, CourseDetailsDTO dto) {
+        course.setMinPoints(dto.getPoints3() != null ? dto.getPoints3() : BigDecimal.ZERO);
+        course.setCurrentPoints(dto.getCurrentPoints() != null ? dto.getCurrentPoints() : BigDecimal.ZERO);
+        course.setMinLabsPoints(dto.getMinLabsPoints());
+        course.setMinTestsPoints(dto.getMinTestsPoints());
+        course.setMinProjectsPoints(dto.getMinProjectsPoints());
+        course.setMinExamsPoints(dto.getMinExamsPoints());
+
+        return course;
+    }
+
+    private CourseDetailsDTO setDtoInfoFromCourse(CourseDetailsDTO dto, Course course) {
+        dto.setCourseName(course.getId().getCourseName());
+        dto.setCurrentPoints(course.getCurrentPoints());
+        dto.setMinPoints(course.getMinPoints());
+        dto.setMinLabsPoints(course.getMinLabsPoints());
+        dto.setMinTestsPoints(course.getMinTestsPoints());
+        dto.setMinProjectsPoints(course.getMinProjectsPoints());
+        dto.setMinExamsPoints(course.getMinExamsPoints());
+
+        Threshold thr = course.getThreshold();
+        dto.setPoints3(thr.getPoints3());
+        dto.setPoints3_5(thr.getPoints3_5());
+        dto.setPoints4(thr.getPoints4());
+        dto.setPoints4_5(thr.getPoints4_5());
+        dto.setPoints5(thr.getPoints5());
+
+        return dto;
+    }
+
 }

@@ -23,4 +23,8 @@ public interface CourseService {
     Course saveCourseWithDTO(CourseDetailsDTO dto, String username);
 
     CourseDetailsDTO getCourseDetailsDTO(CourseId courseId);
+
+    CourseDetailsDTO getEditCourseDetailsDTO(String username, String courseName);
+
+    Course updateCourseWithDTO(CourseDetailsDTO dto, String username);
 }

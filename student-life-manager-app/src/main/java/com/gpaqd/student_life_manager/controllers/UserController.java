@@ -96,18 +96,14 @@ public class UserController {
                                       Model model,
                                       HttpSession session) {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
-        System.out.println(loggedInUser);
-        System.out.println(courseName);
 
         if (loggedInUser == null) {
             return "redirect:/auth/login";
         }
 
         CourseId courseId = new CourseId(courseName, loggedInUser);
-        System.out.println(courseId);
         
         CourseDetailsDTO courseDto = courseService.getCourseDetailsDTO(courseId);
-        System.out.println(courseDto);
 
         if (courseDto == null) {
             // Handle course not found, possibly redirect with an error message
@@ -135,17 +131,45 @@ public class UserController {
         List<Project> next2Projects = deadlineService.getNext2Projects(loggedInUser);
         List<Lab> next2Labs = deadlineService.getNext2Labs(loggedInUser);
 
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println(next2Tests);
-        System.out.println(next2Projects);
-        System.out.println(next2Labs);
-        System.out.println("----------------------------------------------------------------------------");
-
         model.addAttribute("next2Tests", next2Tests);
         model.addAttribute("next2Projects", next2Projects);
         model.addAttribute("next2Labs", next2Labs);
 
         return "user/dashboard";
-}
+    }
+
+    @GetMapping("/courses/edit/{courseName}")
+    public String showEditCourseForm(@PathVariable("courseName") String courseName,
+                                     HttpSession session,
+                                     Model model) {
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        if(loggedInUser == null) {
+            return "redirect:/auth/login";
+        }
+
+        CourseDetailsDTO courseDto = courseService.getEditCourseDetailsDTO(loggedInUser, courseName);
+
+
+        if (courseDto == null) {
+            return "redirect:/user/courses/add";
+        }
+
+        model.addAttribute("courseDto", courseDto);
+        model.addAttribute("editMode", true);
+        return "user/course-form";
+
+    }
+
+    @PostMapping("/courses/edit")
+    public String processEditCourse(@ModelAttribute("courseDto") CourseDetailsDTO dto,
+                                    HttpSession session) {
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/auth/login";
+        }
+
+        courseService.updateCourseWithDTO(dto, loggedInUser);
+        return "redirect:/user/courses";
+    }
 
 }
