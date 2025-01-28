@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface MyTestRepository extends JpaRepository<MyTest, MyTestId> {
 
-    // Next 2 upcoming tests (not exams)
     @Query(value = """
         SELECT * 
         FROM tests
@@ -22,7 +21,6 @@ public interface MyTestRepository extends JpaRepository<MyTest, MyTestId> {
         """, nativeQuery = true)  
     List<MyTest> findNext2UpcomingTests(@Param("username") String username);
 
-    // Next 2 upcoming exams
     @Query(value = """
         SELECT * 
         FROM tests
