@@ -23,16 +23,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Dashboard link -->
-                <!-- Dashboard link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/dashboard}">Dashboard</a>
                 </li>
-                <!-- Courses link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/courses}">Courses</a>
                 </li>
-                <!-- Sign Out button -->
                 <li class="nav-item">
                     <form th:action="@{/auth/logout}" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
@@ -44,9 +40,8 @@
 </nav>
 
 <main class="container my-5">
-    <h2>Add Course + Threshold + Labs</h2>
+    <h2 th:text="${editMode} ? 'Edit Course' : 'Add Course'">Add Course</h2>
 
-    <!-- Zwróć uwagę: "th:object=${courseDto}" i action do POSTa -->
     <form th:object="${courseDto}"
           th:action="${editMode} ? @{/user/courses/edit} : @{/user/courses/add}"
           method="post">
@@ -142,16 +137,9 @@
                 <button type="button" class="btn btn-sm btn-success" onclick="addLabRow()">+ Add Lab</button>
             </div>
             <div class="card-body" id="labsContainer">
-                <!--
-                  Wyświetlamy istniejące labs z listy (courseDto.labs),
-                  Każdy lab to labs[i].(pole).
-                 -->
                 <div th:each="lab, iStat : ${courseDto.labs}" class="mb-3 border rounded p-2">
                     <div class="row g-2">
                         <input type="hidden" th:field="*{labs[__${iStat.index}__].labNumber}" />
-                        <!-- lub można labNumber wystawić do edycji
-                             i nadać min=1, placeholder, itp.
-                        -->
                         <div class="col-md-3">
                             <label class="form-label">Lab Number</label>
                             <input type="number" class="form-control"
@@ -321,14 +309,9 @@
     </div>
 </footer>
 
-<!-- Minimalny skrypt do klonowania rzędu lab -->
 <script>
     function addLabRow() {
-        // labsContainer to <div id="labsContainer">
         const container = document.getElementById('labsContainer');
-
-        // Tworzymy pusty element (lub klon z hidden template) – tutaj w uproszczeniu wklejamy HTML
-        // W realnym projekcie lepiej klonować <template> albo generować dynamicznie index
         const index = container.querySelectorAll('.mb-3.border').length;
         const newDiv = document.createElement('div');
         newDiv.className = 'mb-3 border rounded p-2';
@@ -385,8 +368,7 @@
 
         const newDiv = document.createElement('div');
         newDiv.className = 'mb-3 border rounded p-2';
-
-        // Generujemy inputy z name="myTests[<index>].pole"
+        
         newDiv.innerHTML = `
         <div class="row g-2">
             <div class="col-md-3">

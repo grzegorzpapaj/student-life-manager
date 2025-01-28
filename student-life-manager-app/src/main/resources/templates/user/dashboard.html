@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8" />
     <title>Dashboard</title>
-    <!-- Bootstrap CSS (CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
@@ -24,15 +23,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Dashboard link -->
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/user/dashboard}">Dashboard</a>
                 </li>
-                <!-- Courses link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/courses}">Courses</a>
                 </li>
-                <!-- Sign Out button -->
                 <li class="nav-item">
                     <form th:action="@{/auth/logout}" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
@@ -49,13 +45,11 @@
         Welcome, <span th:text="${user.username}">User</span>!
     </h1>
 
-    <!-- You can show more user data here -->
     <p class="text-center">
         Your password: <span th:text="${user.password}">Password</span>
     </p>
 
     <div class="row justify-content-center">
-        <!-- Left Column (Courses) -->
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">Courses</div>
@@ -68,7 +62,6 @@
             </div>
         </div>
     
-        <!-- Right Column (Upcoming Deadlines) -->
         <div class="col-md-6 mb-3">
             <div class="card h-100">
                 <div class="card-header">
@@ -83,8 +76,6 @@
                             </tr>
                         </thead>
                         <tbody>
-    
-                            <!-- Row for TESTS -->
                             <tr>
                                 <td>Tests</td>
                                 <td>
@@ -103,8 +94,6 @@
                                     </ul>
                                 </td>
                             </tr>
-    
-                            <!-- Row for PROJECTS -->
                             <tr>
                                 <td>Projects</td>
                                 <td>
@@ -123,8 +112,7 @@
                                     </ul>
                                 </td>
                             </tr>
-    
-                            <!-- Row for LABS -->
+
                             <tr>
                                 <td>Labs</td>
                                 <td>

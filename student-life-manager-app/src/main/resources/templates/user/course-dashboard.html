@@ -24,15 +24,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Dashboard link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/dashboard}">Dashboard</a>
                 </li>
-                <!-- Courses link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/courses}">Courses</a>
                 </li>
-                <!-- Sign Out button -->
                 <li class="nav-item">
                     <form th:action="@{/auth/logout}" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
@@ -46,7 +43,6 @@
 <main class="container my-5">
     <h2 th:text="'Dashboard for ' + ${course.courseName}">Course Dashboard</h2>
 
-    <!-- Display Course Details -->
     <div class="card mb-4">
         <div class="card-header">
             <strong>Course Details</strong>
@@ -59,11 +55,9 @@
             <p><strong>Minimum Tests Points:</strong> <span th:text="${course.minTestsPoints}">0</span></p>
             <p><strong>Minimum Projects Points:</strong> <span th:text="${course.minProjectsPoints}">0</span></p>
             <p><strong>Minimum Exams Points:</strong> <span th:text="${course.minExamsPoints}">0</span></p>
-            <!-- Add more course details as needed -->
         </div>
     </div>
 
-    <!-- Display Labs -->
     <div class="card mb-4">
         <div class="card-header">
             <strong>Labs</strong>
@@ -96,7 +90,6 @@
         </div>
     </div>
 
-    <!-- Display Tests -->
     <div class="card mb-4">
         <div class="card-header">
             <strong>Tests</strong>
@@ -129,7 +122,6 @@
         </div>
     </div>
 
-    <!-- Display Projects -->
     <div class="card mb-4">
         <div class="card-header">
             <strong>Projects</strong>
@@ -160,7 +152,6 @@
         </div>
     </div>
 
-    <!-- Optional: Link to Edit Course -->
     <p>
         <a class="btn btn-primary"
            th:href="@{|/user/courses/edit/${course.courseName}|}">Edit Course</a>

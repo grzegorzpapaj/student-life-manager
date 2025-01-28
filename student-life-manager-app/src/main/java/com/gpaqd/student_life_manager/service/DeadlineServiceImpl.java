@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Implementation of DeadlineService for fetching 2 upcoming Tests, Projects, and Labs.
- */
 @Service
 public class DeadlineServiceImpl implements DeadlineService {
 
@@ -32,20 +29,16 @@ public class DeadlineServiceImpl implements DeadlineService {
 
     @Override
     public List<MyTest> getNext2Tests(String username) {
-        // Calls a repository method that returns up to 2 tests for the user
-        // (E.g. using "LIMIT 2" in a native query)
         return testRepository.findNext2UpcomingTests(username);
     }
 
     @Override
     public List<Project> getNext2Projects(String username) {
-        // Calls a repository method that returns up to 2 projects for the user
         return projectRepository.findNext2UpcomingProjects(username);
     }
 
     @Override
     public List<Lab> getNext2Labs(String username) {
-        // Calls a repository method that returns up to 2 labs for the user
         return labRepository.findNext2UpcomingLabs(username);
     }
 }

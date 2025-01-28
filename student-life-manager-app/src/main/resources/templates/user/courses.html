@@ -24,16 +24,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Dashboard link -->
-                <!-- Dashboard link -->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/dashboard}">Dashboard</a>
                 </li>
-                <!-- Courses link -->
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/user/courses}">Courses</a>
                 </li>
-                <!-- Sign Out button -->
                 <li class="nav-item">
                     <form th:action="@{/auth/logout}" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-outline-light ms-2">Sign Out</button>
@@ -71,14 +67,8 @@
             <td th:text="${course.minPoints}">0</td>
             <td th:text="${course.grade}">N/A</td>
             <td>
-                <!-- Przykład przycisku edycji -->
                 <a class="btn btn-primary btn-sm"
                    th:href="@{|/user/courses/edit/${course.id.courseName}|}">Edit</a>
-                <!-- Przykład przycisku usuwania (opcjonalnie)
-                <a class="btn btn-danger btn-sm"
-                   th:href="@{|/user/courses/delete/${course.id.courseName}|}">
-                   Delete
-                </a> -->
             </td>
         </tr>
         </tbody>

@@ -110,21 +110,16 @@ public class CourseServiceImpl implements CourseService{
 
         Course existingCourse = courseRepository.findById(courseId).orElse(null);
 
-        // update fields
         Course updatedCourse = setCoursePoints(existingCourse, dto);
 
-        // threshold
         Threshold thr = findOrCreateThresholdToUse(dto);
 
         updatedCourse.setThreshold(thr);
 
-        // labs, tests, projects:
-        // 1) Wczytaj bieżące z existingCourse
-        // 2) Wyczyść / usuń
         existingCourse.getLabs().clear();
         existingCourse.getMyTests().clear();
         existingCourse.getProjects().clear();
-        // 3) addLabs(dto, existingCourse, username) itp.
+
         addLabs(dto, existingCourse, username);
         addTests(dto, existingCourse, username);
         addProjects(dto, existingCourse, username);
@@ -134,17 +129,13 @@ public class CourseServiceImpl implements CourseService{
 
      @Override
     public BigDecimal calculateTotalPoints(Course course) {
-        // Sum up labs
         BigDecimal labsTotal = course.getLabs().stream()
             .map(lab -> lab.getUserPoints() != null ? lab.getUserPoints() : BigDecimal.ZERO)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Sum up tests (including exams if isExam == true)
         BigDecimal testsTotal = course.getMyTests().stream()
             .map(test -> test.getUserPoints() != null ? test.getUserPoints() : BigDecimal.ZERO)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // Sum up projects
         BigDecimal projectsTotal = course.getProjects().stream()
             .map(project -> project.getUserPoints() != null ? project.getUserPoints() : BigDecimal.ZERO)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -154,18 +145,12 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public String determineGrade(Course course, BigDecimal totalPoints) {
-        // If total points are below the course's min points => grade = "2"
-        // if (totalPoints.compareTo(course.getMinPoints()) < 0) {
-        //     return "2";
-        // }
 
-        Threshold threshold = course.getThreshold(); // e.g. threshold_id -> Threshold object
+        Threshold threshold = course.getThreshold(); 
         if (threshold == null) {
-            // If there's no threshold row, return something default
             return "N/A";
         }
 
-        // Compare from highest to lowest
         if (totalPoints.compareTo(threshold.getPoints5()) >= 0) {
             return "5";
         } else if (totalPoints.compareTo(threshold.getPoints4_5()) >= 0) {
@@ -177,7 +162,7 @@ public class CourseServiceImpl implements CourseService{
         } else if (totalPoints.compareTo(threshold.getPoints3()) >= 0) {
             return "3";
         } else {
-            return "2"; // fallback
+            return "2"; 
         }
     }
 
@@ -187,7 +172,6 @@ public class CourseServiceImpl implements CourseService{
         if (dto.getLabs() != null) {
             for (LabDTO labDto : dto.getLabs()) {
                 if (labDto.getLabNumber() == null) {
-                    // pomijamy puste wiersze
                     continue;
                 }
                 LabId labId = new LabId(
@@ -202,11 +186,9 @@ public class CourseServiceImpl implements CourseService{
                         labDto.getMaxPoints() != null ? labDto.getMaxPoints() : BigDecimal.ZERO,
                         labDto.getDate(),
                         labDto.getDeadline());
-                // powiązanie z course
                 lab.setCourse(savedCourse);
 
                 savedCourse.addLab(lab);
-                // addLab() w encji Course ustawia lab.setCourse(this).
             }
         }
         return savedCourse;
@@ -245,7 +227,6 @@ public class CourseServiceImpl implements CourseService{
         if (dto.getMyTests() != null) {
             for (MyTestDTO testDto : dto.getMyTests()) {
                 if (testDto.getTestNumber() == null) {
-                    // pomijamy puste wiersze
                     continue;
                 }
 
@@ -267,7 +248,6 @@ public class CourseServiceImpl implements CourseService{
 
                 test.setCourse(savedCourse);
                 savedCourse.addMyTest(test);
-                // addMyTest() w encji Course ustawia test.setCourse(this).
             }
         }
         return savedCourse;
