@@ -116,13 +116,11 @@ public class UserController {
         }
 
         CourseId courseId = new CourseId(courseName, loggedInUser);
-        //znajdz normalny course po id
         
         CourseDetailsDTO courseDto = courseService.getCourseDetailsDTO(courseId);
         Course course = courseService.findById(courseId);
 
         if (courseDto == null) {
-            // Handle course not found, possibly redirect with an error message
             return "redirect:/user/courses?error=CourseNotFound";
         }
 
@@ -134,9 +132,8 @@ public class UserController {
     
 
         model.addAttribute("course", courseDto);
-        // Add any additional attributes needed for the dashboard
 
-        return "user/course-dashboard"; // Path to your course dashboard Thymeleaf template
+        return "user/course-dashboard";
     }
 
     @GetMapping("/dashboard")
@@ -149,7 +146,6 @@ public class UserController {
         User user = userService.findById(loggedInUser);
         model.addAttribute("user", user);
 
-        // Using the DeadlineService
         List<MyTest> next2Tests = deadlineService.getNext2Tests(loggedInUser);
         List<Project> next2Projects = deadlineService.getNext2Projects(loggedInUser);
         List<Lab> next2Labs = deadlineService.getNext2Labs(loggedInUser);
